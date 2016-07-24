@@ -430,7 +430,7 @@ public abstract class OpenGLRenderer implements GLSurfaceView.Renderer {
 	protected void computeProjMatrix3D(float [] matrix3D) {
 		float ratio = (float) mWidth / (float) mHeight;
 		float near = 0.1f;
-		Matrix.frustumM(matrix3D, 0, -near, near, -near / ratio, near / ratio, near, 100);
+		Matrix.frustumM(matrix3D, 0, -near, near, -near / ratio, near / ratio, near, 100);	// TODO: Far 100 is hardcoded
 	}
 
 	@Override
