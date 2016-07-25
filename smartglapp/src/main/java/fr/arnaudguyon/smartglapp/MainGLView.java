@@ -2,6 +2,8 @@ package fr.arnaudguyon.smartglapp;
 
 import android.content.Context;
 
+import java.util.ArrayList;
+
 import fr.arnaudguyon.smartgl.opengl.Face3D;
 import fr.arnaudguyon.smartgl.opengl.Object3D;
 import fr.arnaudguyon.smartgl.opengl.OpenGLRenderer;
@@ -11,9 +13,9 @@ import fr.arnaudguyon.smartgl.opengl.SmartGLFragment;
 import fr.arnaudguyon.smartgl.opengl.SmartGLView;
 import fr.arnaudguyon.smartgl.opengl.Sprite;
 import fr.arnaudguyon.smartgl.opengl.Texture;
-import fr.arnaudguyon.smartgl.opengl.Tools;
 import fr.arnaudguyon.smartgl.opengl.UVList;
 import fr.arnaudguyon.smartgl.opengl.VertexList;
+import fr.arnaudguyon.smartgl.tools.ObjectReader;
 
 /**
  * Created by aguyon on 24/07/16.
@@ -56,10 +58,13 @@ public class MainGLView extends SmartGLView {
         vertexList.add(0,8,z);
         vertexList.add(4,8,z);
         vertexList.finalizeBuffer();
-        face.setVertexList(vertexList);   // TODO: load object or provide list
+        face.setVertexList(vertexList);
 
         mObject3D.addFace(face);
         mObject3D.setPos(0, -4, -14);   // ! clip after Z = -100
+
+        ObjectReader reader = new ObjectReader();
+        ArrayList<Object3D> objects = reader.readRawResource(getContext(), R.raw.crate, new Texture(getContext(), R.drawable.door));
 
         ShaderTexture shader = new ShaderTexture();
         RenderPass renderPass = new RenderPass();
@@ -67,6 +72,11 @@ public class MainGLView extends SmartGLView {
 
         renderPass.getRenderObjects().add(mSprite);
         renderPass.getRenderObjects().add(mObject3D);
+
+        for(Object3D object : objects) {
+            object.setPos(0,0 , -10);
+            renderPass.getRenderObjects().add(object);
+        }
 
         getSmartGLRenderer().addRenderPass(renderPass);
     }
