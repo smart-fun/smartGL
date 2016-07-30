@@ -1,7 +1,6 @@
 package fr.arnaudguyon.smartgl.tools;
 
 import android.content.Context;
-import android.util.Log;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -27,10 +26,17 @@ public class ObjectReader {
 
     private ArrayList<Object3D> mObjects = new ArrayList<>();
     private Object3D mObject;
-    private ArrayList<Float> mVertex;
-    private ArrayList<Float> mUVs;
+    private ArrayList<Float> mVertex = new ArrayList<>();
+    private ArrayList<Float> mUVs = new ArrayList<>();
     private ArrayList<ArrayList<Integer>> mFacesIndex;
     private Texture mDefaultTexture;
+
+    private enum State {
+        NONE,
+        ADDING_VERTEX,
+        ADDING_UVS,
+        ADDING_FACE_INDEX
+    }
 
     public ObjectReader() {
     }
@@ -45,19 +51,30 @@ public class ObjectReader {
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
         String line;
         try {
+
+            State state = State.NONE;
+
             while ((line = bufferedReader.readLine()) != null) {
+                line = line.replace("  ", " ");
                 String[] elements = line.split(" ");
                 if (elements.length >= 3) {
                     switch (elements[0]) {
                         case "v":
+                            if (state != State.ADDING_VERTEX) {
+                                finalizeObject();
+                                mObject = new Object3D();
+                                state = State.ADDING_VERTEX;
+                            }
                             if (elements.length >= 4) {
                                 addVertex(elements[1], elements[2], elements[3]);
                             }
                             break;
                         case "vt":
+                            state = State.ADDING_UVS;
                             addUV(elements[1], elements[2]);
                             break;
                         case "f":
+                            state = State.ADDING_FACE_INDEX;
                             if (elements.length >= 4) {
                                 addFaceIndex(elements);
                             }
@@ -75,15 +92,15 @@ public class ObjectReader {
     private void addVertex(String sx, String sy, String sz) {
 
         // has already UVs, so this is a new Object
-        if ((mObject != null) && (mUVs != null)) {
-            finalizeObject();
-        }
-        // no object, create a new one
-        if (mObject == null) {
-            Log.i(TAG, "New Object");
-            mObject = new Object3D();
-            mVertex = new ArrayList<>();
-        }
+//        if ((mObject != null) /*&& (mUVs != null)*/) {
+//            finalizeObject();
+//        }
+//        // no object, create a new one
+//        if (mObject == null) {
+//            Log.i(TAG, "New Object");
+//            mObject = new Object3D();
+//            //  mVertex = new ArrayList<>();    // no, vertex index always increase even if different object
+//        }
 
         Float x = fromString(sx);
         Float y = fromString(sy);
@@ -96,9 +113,9 @@ public class ObjectReader {
     }
 
     private void addUV(String su, String sv) {
-        if (mUVs == null) {
-            mUVs = new ArrayList<>();
-        }
+//        if (mUVs == null) {
+//            mUVs = new ArrayList<>();
+//        }
         Float u = fromString(su);
         Float v = fromString(sv);
         if ((u != null) && (v != null)) {
@@ -134,7 +151,7 @@ public class ObjectReader {
     private void finalizeObject() {
 
         // only supports texture mapping (vertex + uvs)
-        if ((mObject != null) && (mVertex != null) && (mUVs != null) && (mFacesIndex != null) && (mVertex.size() > 0)) {
+        if ((mObject != null) /*&& (mVertex != null) && (mUVs != null)*/ && (mFacesIndex != null) && (mVertex.size() > 0)) {
 
             Vector<Face3D> faces = new Vector<>();
             for (ArrayList<Integer> faceIndex : mFacesIndex) {
@@ -164,8 +181,8 @@ public class ObjectReader {
             mObjects.add(mObject);
         }
         mObject = null;
-        mVertex = null;
-        mUVs = null;
+//        mVertex = null;
+//        mUVs = null;
         mFacesIndex = null;
     }
 
