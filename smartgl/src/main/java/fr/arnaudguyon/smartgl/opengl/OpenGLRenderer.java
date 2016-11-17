@@ -20,7 +20,7 @@ import junit.framework.Assert;
 import fr.arnaudguyon.smartgl.R;
 import fr.arnaudguyon.smartgl.math.Vector2D;
 
-/* package */ abstract class OpenGLRenderer implements GLSurfaceView.Renderer {
+public abstract class OpenGLRenderer implements GLSurfaceView.Renderer {
 
 	private WeakReference<OpenGLView> mOpenGLView;
 	private int mWidth, mHeight;
