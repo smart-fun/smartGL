@@ -20,7 +20,7 @@ import junit.framework.Assert;
 import fr.arnaudguyon.smartgl.R;
 import fr.arnaudguyon.smartgl.math.Vector2D;
 
-public abstract class OpenGLRenderer implements GLSurfaceView.Renderer {
+/* package */ abstract class OpenGLRenderer implements GLSurfaceView.Renderer {
 
 	private WeakReference<OpenGLView> mOpenGLView;
 	private int mWidth, mHeight;
@@ -83,7 +83,7 @@ public abstract class OpenGLRenderer implements GLSurfaceView.Renderer {
 		mClearColor[3] = a;
 	}
 	
-	public final void setListener(OpenGLView listener) {
+	final void setListener(OpenGLView listener) {
 		mOpenGLView = new WeakReference<>(listener);
 	}
 	final OpenGLView getListener() {
@@ -407,19 +407,9 @@ public abstract class OpenGLRenderer implements GLSurfaceView.Renderer {
         // Viewport has changed its size, release resources before acquiring
         if (justResizing) {
             if (view != null) {
-                OpenGLFragment fragment = view.getFragment();
-                if (fragment != null) {
-                    fragment.onReleaseResourcesInternal();  // changes mInitDone=false by calling onReleaseResourcesInternal back on renderer
-                    fragment.onReleaseResources();
-                }
+				view.onViewResized(width, height);
             }
         }
-
-        if (view != null) {
-            view.onAcquireResourcesInternal();
-            view.onAcquireResources();
-        }
-
 		mInitDone = true;
 	}
 	
@@ -534,13 +524,16 @@ public abstract class OpenGLRenderer implements GLSurfaceView.Renderer {
 //		}
 //	}
 
-    void onReleaseResourcesInternal() {
+
+    void onPause() {
         synchronized (this) {
             mInitDone = false;
             mRenderPasses.clear();
         }
     }
-    protected abstract void onReleaseResources();
+	void onResume() {
+
+	}
 
     private void loadDebugData(Context context) {
         Texture colCircleTexture = new Texture(context, R.drawable.col_circle);

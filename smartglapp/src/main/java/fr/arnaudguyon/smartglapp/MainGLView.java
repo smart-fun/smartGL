@@ -1,17 +1,16 @@
 package fr.arnaudguyon.smartglapp;
 
 import android.content.Context;
+import android.util.AttributeSet;
 
 import fr.arnaudguyon.smartgl.opengl.Face3D;
 import fr.arnaudguyon.smartgl.opengl.Object3D;
 import fr.arnaudguyon.smartgl.opengl.OpenGLRenderer;
 import fr.arnaudguyon.smartgl.opengl.RenderPass;
 import fr.arnaudguyon.smartgl.opengl.ShaderTexture;
-import fr.arnaudguyon.smartgl.opengl.SmartGLFragment;
 import fr.arnaudguyon.smartgl.opengl.SmartGLView;
 import fr.arnaudguyon.smartgl.opengl.Sprite;
 import fr.arnaudguyon.smartgl.opengl.Texture;
-import fr.arnaudguyon.smartgl.opengl.Tools;
 import fr.arnaudguyon.smartgl.opengl.UVList;
 import fr.arnaudguyon.smartgl.opengl.VertexList;
 
@@ -22,14 +21,31 @@ public class MainGLView extends SmartGLView {
 
     private Sprite mSprite;
     private Object3D mObject3D;
+    private float mRandomSpeed;
 
-    public MainGLView(Context context, OpenGLRenderer renderer, SmartGLFragment fragment) {
-        super(context, renderer, fragment);
+    private float mSpeedX = 200;
+    private float mSpeedY = 200;
+
+    public MainGLView(Context context) {
+        super(context);
+        init();
+    }
+
+    public MainGLView(Context context, AttributeSet attrs) {
+        super(context, attrs);
+        init();
+    }
+
+    private void init() {
+        mRandomSpeed = (float) ((Math.random() * 50) + 100);
+        if (Math.random() > 0.5f) {
+            mRandomSpeed *= -1;
+        }
     }
 
     @Override
-    protected void onAcquireResources() {
-        super.onAcquireResources();
+    protected void acquireResources() {
+        super.acquireResources();
 
         mSprite = new Sprite(120, 120);
         mSprite.setPos(200, 300);
@@ -72,7 +88,7 @@ public class MainGLView extends SmartGLView {
     }
 
     @Override
-    protected void onReleaseResources() {
+    protected void releaseResources() {
 
         if (mSprite != null) {
             mSprite.releaseResources();
@@ -86,12 +102,50 @@ public class MainGLView extends SmartGLView {
 
         float frameDuration = renderer.getFrameDuration();
         if (mSprite != null) {
-            float angle = mSprite.getRotation() + frameDuration*50;
+            float angle = mSprite.getRotation() + frameDuration*mRandomSpeed;
             mSprite.setRotation(angle);
+
+            float x = mSprite.getPosX() + frameDuration*mSpeedX;
+            float y = mSprite.getPosY() + frameDuration*mSpeedY;
+            if (x < mSprite.getWidth()/2) {
+                x = mSprite.getWidth()/2;
+                mSpeedX = -mSpeedX;
+                if (mSpeedY > 0) {
+                    mRandomSpeed = Math.abs(mRandomSpeed);
+                } else {
+                    mRandomSpeed = -Math.abs(mRandomSpeed);
+                }
+            } else if (x + mSprite.getWidth()/2 >= getWidth()) {
+                x = getWidth() - mSprite.getWidth()/2;
+                mSpeedX = -mSpeedX;
+                if (mSpeedY > 0) {
+                    mRandomSpeed = -Math.abs(mRandomSpeed);
+                } else {
+                    mRandomSpeed = Math.abs(mRandomSpeed);
+                }
+            }
+            if (y < mSprite.getHeight()/2) {
+                y = mSprite.getHeight()/2;
+                mSpeedY = -mSpeedY;
+                if (mSpeedX > 0) {
+                    mRandomSpeed = -Math.abs(mRandomSpeed);
+                } else {
+                    mRandomSpeed = Math.abs(mRandomSpeed);
+                }
+            } else if (y + mSprite.getHeight()/2 >= getHeight()) {
+                y = getHeight() - mSprite.getHeight()/2;
+                mSpeedY = -mSpeedY;
+                if (mSpeedX > 0) {
+                    mRandomSpeed = Math.abs(mRandomSpeed);
+                } else {
+                    mRandomSpeed = -Math.abs(mRandomSpeed);
+                }
+            }
+            mSprite.setPos(x, y);
         }
 
         if (mObject3D != null) {
-            float angle = mObject3D.getRotY() + frameDuration*150;
+            float angle = mObject3D.getRotY() + frameDuration*mRandomSpeed;
             mObject3D.setRotation(0, angle, 0);
 
 //            float[] windowPos = new float[3];
@@ -104,5 +158,11 @@ public class MainGLView extends SmartGLView {
         }
 
 
+    }
+
+    @Override
+    protected void onViewResized(int width, int height) {
+        releaseResources();
+        acquireResources();
     }
 }
