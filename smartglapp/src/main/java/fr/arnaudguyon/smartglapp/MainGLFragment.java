@@ -15,7 +15,7 @@ import fr.arnaudguyon.smartgl.opengl.SmartGLRenderer;
  */
 public class MainGLFragment extends Fragment {
 
-    private MainGLView mGLView;
+    private MainGLView mFragmentGLView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -30,14 +30,14 @@ public class MainGLFragment extends Fragment {
         SmartGLRenderer renderer = new SmartGLRenderer(context);
         renderer.setClearColor(0,0,0, 1);
 
-        mGLView = (MainGLView) view.findViewById(R.id.fragmentGLView);
-        mGLView.setRenderer(renderer);
+        mFragmentGLView = (MainGLView) view.findViewById(R.id.fragmentGLView);
+        mFragmentGLView.setRenderer(renderer);
     }
 
     @Override
     public void onPause() {
-        if (mGLView != null) {
-            mGLView.onPause();
+        if (mFragmentGLView != null) {
+            mFragmentGLView.onPause();
         }
         super.onPause();
     }
@@ -45,8 +45,8 @@ public class MainGLFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        if (mGLView != null) {
-            mGLView.onResume();
+        if (mFragmentGLView != null) {
+            mFragmentGLView.onResume();
         }
     }
 
