@@ -89,7 +89,7 @@ public class MainGLView extends SmartGLView {
 
     @Override
     protected void releaseResources() {
-
+        super.releaseResources();
         if (mSprite != null) {
             mSprite.releaseResources();
             mSprite = null;
@@ -156,7 +156,6 @@ public class MainGLView extends SmartGLView {
 //            }
 
         }
-
 
     }
 

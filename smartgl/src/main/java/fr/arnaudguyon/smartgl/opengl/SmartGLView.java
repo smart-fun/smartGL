@@ -125,7 +125,13 @@ public abstract class SmartGLView extends OpenGLView {
 		activateTouch(true);    // TODO: only if necessary
     }
 
-    public void activateTouch(boolean activate) {
+	@Override
+	protected void releaseResources() {
+		super.releaseResources();
+		mTouchHelper = null;
+	}
+
+	public void activateTouch(boolean activate) {
         if (activate) {
             mTouchHelper = new TouchHelper();
         } else {

@@ -56,7 +56,6 @@ import android.util.AttributeSet;
 
 	@Override
 	public void onResume() {
-		acquireResources();
 		super.onResume();
 		if (mOpenGLRenderer != null) {
 			mOpenGLRenderer.onResume();
