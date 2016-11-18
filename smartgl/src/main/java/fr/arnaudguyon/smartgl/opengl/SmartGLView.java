@@ -4,6 +4,7 @@ import java.util.Vector;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -12,24 +13,18 @@ import fr.arnaudguyon.smartgl.touch.TouchHelperEvent;
 
 public abstract class SmartGLView extends OpenGLView {
 	
-	//private static final String TAG = "SmartGLView";
-
 	private TouchHelper mTouchHelper;
 	private Sprite mInputSprite;
 
-	public SmartGLView(Context context, OpenGLRenderer renderer, SmartGLFragment fragment) {
-		super(context, renderer, fragment);
+	public SmartGLView(Context context) {
+		super(context);
 	}
-	
-	public SmartGLFragment getFragment() {
-        OpenGLFragment fragment = super.getFragment();
-        if ((fragment != null) && (fragment instanceof SmartGLFragment)) {
-            return (SmartGLFragment) fragment;
-        } else {
-            return null;
-        }
+
+	public SmartGLView(Context context, AttributeSet attrs) {
+		super(context, attrs);
 	}
-	
+
+	// TODO: improve that
 	public SmartGLRenderer getSmartGLRenderer() {
 		return (SmartGLRenderer) getOpenGLRenderer();
 	}
@@ -124,18 +119,19 @@ public abstract class SmartGLView extends OpenGLView {
 	protected void onTouchEvent(TouchHelperEvent event) {
 	}
 
-    void onAcquireResourcesInternal() {
-        super.onAcquireResourcesInternal();
-
-        activateTouch(true);    // TODO: only if necessary
-
-
+	@Override
+    protected void acquireResources() {
+		super.acquireResources();
+		activateTouch(true);    // TODO: only if necessary
     }
 
-    protected void onAcquireResources() {
-    }
+	@Override
+	protected void releaseResources() {
+		super.releaseResources();
+		mTouchHelper = null;
+	}
 
-    public void activateTouch(boolean activate) {
+	public void activateTouch(boolean activate) {
         if (activate) {
             mTouchHelper = new TouchHelper();
         } else {

@@ -8,7 +8,4 @@ public class SmartGLRenderer extends OpenGLRenderer {
         super(context);
     }
 
-    @Override
-    protected void onReleaseResources() {
-    }
 }

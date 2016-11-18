@@ -83,7 +83,7 @@ public abstract class OpenGLRenderer implements GLSurfaceView.Renderer {
 		mClearColor[3] = a;
 	}
 	
-	public final void setListener(OpenGLView listener) {
+	final void setListener(OpenGLView listener) {
 		mOpenGLView = new WeakReference<>(listener);
 	}
 	final OpenGLView getListener() {
@@ -388,12 +388,10 @@ public abstract class OpenGLRenderer implements GLSurfaceView.Renderer {
 	public void onSurfaceChanged(GL10 glUnused, int width, int height) {
 
         mPreviousTime = 0;
-        // Prevent from calling onAcquireResources twice, because onSurfaceChanged is often called twice
+        // Prevent from calling acquireResources or onViewResized twice, because onSurfaceChanged is often called twice
         if (mInitDone && (mWidth==width) && (mHeight==height)) {
             return;
         }
-
-        final boolean justResizing = mInitDone;
 
 		GLES20.glViewport(0, 0, width, height);
 
@@ -404,21 +402,13 @@ public abstract class OpenGLRenderer implements GLSurfaceView.Renderer {
 		computeProjMatrix3D(mProj3DMatrix);
 
         OpenGLView view = getListener();
-        // Viewport has changed its size, release resources before acquiring
-        if (justResizing) {
-            if (view != null) {
-                OpenGLFragment fragment = view.getFragment();
-                if (fragment != null) {
-                    fragment.onReleaseResourcesInternal();  // changes mInitDone=false by calling onReleaseResourcesInternal back on renderer
-                    fragment.onReleaseResources();
-                }
-            }
-        }
-
-        if (view != null) {
-            view.onAcquireResourcesInternal();
-            view.onAcquireResources();
-        }
+		if (view != null) {
+			if (mInitDone) {
+				view.onViewResized(width, height);
+			} else {
+				view.acquireResources();
+			}
+		}
 
 		mInitDone = true;
 	}
@@ -534,13 +524,15 @@ public abstract class OpenGLRenderer implements GLSurfaceView.Renderer {
 //		}
 //	}
 
-    void onReleaseResourcesInternal() {
+
+    void onPause() {
         synchronized (this) {
             mInitDone = false;
             mRenderPasses.clear();
         }
     }
-    protected abstract void onReleaseResources();
+	void onResume() {
+	}
 
     private void loadDebugData(Context context) {
         Texture colCircleTexture = new Texture(context, R.drawable.col_circle);
