@@ -4,7 +4,7 @@ import java.util.Vector;
 
 import android.opengl.Matrix;
 
-/* package */ abstract class RenderObject implements IShaderTextureFade {
+public abstract class RenderObject implements IShaderTextureFade {
 
 	private boolean mIs3D;
 	private boolean mVisible;
