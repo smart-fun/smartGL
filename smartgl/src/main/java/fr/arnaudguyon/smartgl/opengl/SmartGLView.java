@@ -4,6 +4,7 @@ import java.util.Vector;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
@@ -11,10 +12,11 @@ import android.view.View;
 import fr.arnaudguyon.smartgl.touch.TouchHelper;
 import fr.arnaudguyon.smartgl.touch.TouchHelperEvent;
 
-public abstract class SmartGLView extends OpenGLView {
+public class SmartGLView extends OpenGLView {
 	
 	private TouchHelper mTouchHelper;
 	private Sprite mInputSprite;
+    private SmartGLViewController mListener;
 
 	public SmartGLView(Context context) {
 		super(context);
@@ -24,10 +26,23 @@ public abstract class SmartGLView extends OpenGLView {
 		super(context, attrs);
 	}
 
-	// TODO: improve that
+    public void setDefaultRenderer(@NonNull Context context) {
+        SmartGLRenderer renderer = new SmartGLRenderer(context);
+        renderer.setClearColor(0,0,0, 1);   // background color (R,G,B,A)
+        setRenderer(renderer);
+    }
+
 	public SmartGLRenderer getSmartGLRenderer() {
-		return (SmartGLRenderer) getOpenGLRenderer();
+        OpenGLRenderer renderer = getOpenGLRenderer();
+        if (renderer instanceof SmartGLRenderer) {
+            return (SmartGLRenderer) renderer;
+        }
+		return null;
 	}
+
+    public void setController(SmartGLViewController controller) {
+        mListener = controller;
+    }
 
 	@SuppressLint("ClickableViewAccessibility")
 	@Override
@@ -47,7 +62,11 @@ public abstract class SmartGLView extends OpenGLView {
 	@Override
 	public void onPreRender(OpenGLRenderer renderer) {
 		super.onPreRender(renderer);
-		
+
+        if (mListener != null) {
+            mListener.onTick(this);
+        }
+
 		// Handle Touch Events: skip several moves in a row and send OnTouchEvent (on OpenGLThread)
 		if (mTouchHelper != null) {
 			TouchHelperEvent event = mTouchHelper.getNextEvent();
@@ -117,18 +136,27 @@ public abstract class SmartGLView extends OpenGLView {
 	}
 	
 	protected void onTouchEvent(TouchHelperEvent event) {
+        if (mListener != null) {
+            mListener.onTouchEvent(this, event);
+        }
 	}
 
 	@Override
     protected void acquireResources() {
 		super.acquireResources();
 		activateTouch(true);    // TODO: only if necessary
+        if (mListener != null) {
+            mListener.onPrepareView(this);
+        }
     }
 
 	@Override
 	protected void releaseResources() {
 		super.releaseResources();
 		mTouchHelper = null;
+        if (mListener != null) {
+            mListener.onReleaseView(this);
+        }
 	}
 
 	public void activateTouch(boolean activate) {
@@ -139,4 +167,10 @@ public abstract class SmartGLView extends OpenGLView {
         }
     }
 
+    @Override
+    protected void onViewResized(int width, int height) {
+        if (mListener != null) {
+            mListener.onResizeView(this);
+        }
+    }
 }

@@ -1,72 +1,26 @@
 # SmartGL #
 
-A SmartGL scene works with different components:
+**SmartGL** is an Android Studio library that simplifies the use of **OpenGL** to display **2D Sprites** and **3D Textured Objects**.
 
-* a SmartGL**View** in your Layout
-* a SmartGL**Renderer** linked to the SmartGLView
-* Render**Object**s (Object3D or Sprite) which are added to the SmartGLRenderer
+It has been used for several games and apps on the store.
 
-## Preparing the code and layout ##
+## Usage ##
 
-### Custom SmartGLView ###
-
-This is the View which will be displayed on screen.
-
-acquireResources() and releaseResources() must be used to load and unload data used in the scene, like Textures. They are called when the View is presented or dismissed. acquireResource() is a good place to build your scene, which means to construct the objects and add them to the Renderer.
-
-onPreRender() method is called every frame. This is where you can move the objects in space.
-
-```java
-public class CustomGLView extends SmartGLView {
-
-    public CustomGLView(Context context) {
-        super(context);
-    }
-
-    public CustomGLView(Context context, AttributeSet attrs) {
-        super(context, attrs);
-    }
-
-    @Override
-    protected void acquireResources() {
-        super.acquireResources();
-        // load resources like common Textures
-        // build your objects here and add them to the Renderer
-    }
-
-    @Override
-    protected void releaseResources() {
-        super.releaseResources();
-        // release resources like Textures
-    }
-
-    @Override
-    public void onPreRender(OpenGLRenderer renderer) {
-        super.onPreRender(renderer);
-        // is called before rendering the next frame
-        // typically move your objects on screen here
-}
-
-
-```
-
-## Activity ##
+The OpenGL scene is displayed using a **SmartGLView** and a **SmartGLViewController**.
 
 ```xml
-
-    <fr.arnaudguyon.smartglapp.MainGLView
-        android:id="@+id/customGLView"
+    <fr.arnaudguyon.smartgl.opengl.SmartGLView
+        android:id="@+id/smartGLView"
         android:layout_width="match_parent"
-        android:layout_height="150dp" />
-        
+        android:layout_height="match_parent" />
 ```
 
-You need to set an OpenGLRenderer to your CustomGLView. There is a default SmartGLRenderer that you can use. You can also set a default background color for the View using setClearColor.
+The SmartGLViewController is just an interface, so it could be implemented by your Activity or Fragment, but I recommend to create a separate class for it.
 
 ```java
 public class MainActivity extends AppCompatActivity {
 
-    private MainGLView mCustomGLView;
+    private SmartGLView mSmartGLView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,16 +28,22 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_main);
 
-        mCustomGLView = (MainGLView) findViewById(R.id. customGLView);
-        SmartGLRenderer renderer = new SmartGLRenderer(this);   // use the default renderer
-        renderer.setClearColor(0,0,0, 1);   // background color (R,G,B,A)
-        mCustomGLView.setRenderer(renderer);
+        mSmartGLView = (SmartGLView) findViewById(R.id.smartGLView);
+        mSmartGLView.setController(new GLViewController());
     }
+}
+```
 
+### LifeCycle ###
+
+It is really important to inform the SmartGLView when the Activity or Fragment is paused or resumed. **If you miss this step the scene will not be initialized or restored correctly**.
+
+```java
+public class MainActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
-        if (mCustomGLView != null) {
-            mCustomGLView.onPause();
+        if (mSmartGLView != null) {
+            mSmartGLView.onPause();
         }
         super.onPause();
     }
@@ -91,10 +51,16 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if (mCustomGLView != null) {
-            mCustomGLView.onResume();
+        if (mSmartGLView != null) {
+            mSmartGLView.onResume();
         }
     }
 }
-
 ```
+
+When the SmartGLView is ready, **onPrepareView**(SmartGLView smartGLView) is called on the SmartGLViewController.
+
+This method is the best place to prepare the scene (load textures, and add objects to the scene).
+
+When the SmartGLView is dismissed, **onReleaseView**(SmartGLView smartGLView) is called. This is the best place to release content from memory (like textures).
+

@@ -64,5 +64,5 @@ import android.util.AttributeSet;
 
 	protected void acquireResources() {}
 	protected void releaseResources() {}
-	protected void onViewResized(int width, int height) {}
+	protected abstract void onViewResized(int width, int height);
 }

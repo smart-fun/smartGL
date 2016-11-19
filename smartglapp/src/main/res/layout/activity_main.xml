@@ -15,7 +15,7 @@
         android:layout_height="wrap_content"
         android:text="ACTIVITY GL VIEW" />
 
-    <fr.arnaudguyon.smartglapp.MainGLView
+    <fr.arnaudguyon.smartgl.opengl.SmartGLView
         android:id="@+id/activityGLView"
         android:layout_width="match_parent"
         android:layout_height="150dp"

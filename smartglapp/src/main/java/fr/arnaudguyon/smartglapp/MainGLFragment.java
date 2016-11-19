@@ -8,14 +8,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import fr.arnaudguyon.smartgl.opengl.SmartGLRenderer;
+import fr.arnaudguyon.smartgl.opengl.SmartGLView;
 
 /**
  * Created by aguyon on 24/07/16.
  */
 public class MainGLFragment extends Fragment {
 
-    private MainGLView mFragmentGLView;
+    private SmartGLView mFragmentGLView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -27,11 +27,9 @@ public class MainGLFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         final Context context = view.getContext();
-        SmartGLRenderer renderer = new SmartGLRenderer(context);
-        renderer.setClearColor(0,0,0, 1);
-
-        mFragmentGLView = (MainGLView) view.findViewById(R.id.fragmentGLView);
-        mFragmentGLView.setRenderer(renderer);
+        mFragmentGLView = (SmartGLView) view.findViewById(R.id.fragmentGLView);
+        mFragmentGLView.setDefaultRenderer(context);
+        mFragmentGLView.setController(new GLViewController());
     }
 
     @Override

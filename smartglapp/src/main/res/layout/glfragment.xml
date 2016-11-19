@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:text="FRAGMENT GL VIEW" />
 
-    <fr.arnaudguyon.smartglapp.MainGLView
+    <fr.arnaudguyon.smartgl.opengl.SmartGLView
         android:id="@+id/fragmentGLView"
         android:layout_width="200dp"
         android:layout_height="match_parent"
