@@ -43,6 +43,9 @@ public class SmartGLView extends OpenGLView {
     public void setController(SmartGLViewController controller) {
         mListener = controller;
     }
+    public SmartGLViewController getController() {
+        return mListener;
+    }
 
 	@SuppressLint("ClickableViewAccessibility")
 	@Override
