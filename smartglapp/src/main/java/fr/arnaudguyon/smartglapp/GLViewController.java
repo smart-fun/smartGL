@@ -49,20 +49,20 @@ public class GLViewController implements SmartGLViewController {
         face.setTexture(new Texture(context, R.drawable.door));
         UVList uvList = new UVList();
         uvList.init(4);
-        uvList.add(0,0);
-        uvList.add(1,0);
         uvList.add(0,1);
         uvList.add(1,1);
+        uvList.add(0,0);
+        uvList.add(1,0);
         uvList.finalizeBuffer();
         face.setUVList(uvList);   // TODO: create SquareUV for simple mapping (or load object)
 
         VertexList vertexList = new VertexList();
         vertexList.init(4);
         float z = 0;
-        vertexList.add(0,0,z);
-        vertexList.add(4,0,z);
-        vertexList.add(0,8,z);
-        vertexList.add(4,8,z);
+        vertexList.add(-2,0,z);
+        vertexList.add(+2,0,z);
+        vertexList.add(-2,8,z);
+        vertexList.add(+2,8,z);
         vertexList.finalizeBuffer();
         face.setVertexList(vertexList);   // TODO: load object or provide list
 

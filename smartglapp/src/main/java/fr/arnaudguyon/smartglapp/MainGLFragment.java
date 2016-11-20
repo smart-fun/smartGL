@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import fr.arnaudguyon.smartgl.opengl.OpenGLCamera;
 import fr.arnaudguyon.smartgl.opengl.SmartGLView;
 
 /**
@@ -30,6 +31,12 @@ public class MainGLFragment extends Fragment {
         mFragmentGLView = (SmartGLView) view.findViewById(R.id.fragmentGLView);
         mFragmentGLView.setDefaultRenderer(context);
         mFragmentGLView.setController(new GLViewController());
+
+        OpenGLCamera camera = mFragmentGLView.getSmartGLRenderer().getCamera();
+        camera.setFOV(90);
+        camera.setPosition(0, 0, -4);
+        camera.setRotation(0, 0, 20f);
+
     }
 
     @Override

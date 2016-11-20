@@ -35,6 +35,7 @@ public abstract class OpenGLRenderer implements GLSurfaceView.Renderer {
 	private Vector<RenderPass> mRenderPasses;
 	private boolean mInitDone;
 	private float[] mClearColor = {0.2f, 0.5f, 0.7f, 1};	// RGBA
+    private OpenGLCamera mCamera;
 	
 	private Shader mPreviousShader = null;
 	private boolean mUseTexture = false;
@@ -94,6 +95,14 @@ public abstract class OpenGLRenderer implements GLSurfaceView.Renderer {
         }
     }
 
+    public void setCamera(OpenGLCamera camera) {
+        mCamera = camera;
+    }
+
+    public OpenGLCamera getCamera() {
+        return mCamera;
+    }
+
     public void setDebugMode(Context context) {
         loadDebugData(context);
         mDebugMode = true;
@@ -149,6 +158,10 @@ public abstract class OpenGLRenderer implements GLSurfaceView.Renderer {
 					view.onPreRender(this);
 				}
 			}
+
+            if ((mCamera != null) && mCamera.isDirty()) {
+                computeProjMatrix3D(mProj3DMatrix);
+            }
 			
 			onPreRender(gl10);
 
@@ -413,14 +426,43 @@ public abstract class OpenGLRenderer implements GLSurfaceView.Renderer {
 		mInitDone = true;
 	}
 	
-	protected void computeProjMatrix2D(float [] matrix2D) {
+	private void computeProjMatrix2D(float [] matrix2D) {
 		Matrix.orthoM(matrix2D, 0, 0f, mWidth, mHeight, 0, -1f, 1f);
 	}
 
-	protected void computeProjMatrix3D(float [] matrix3D) {
-		float ratio = (float) mWidth / (float) mHeight;
-		float near = 0.1f;
-		Matrix.frustumM(matrix3D, 0, -near, near, -near / ratio, near / ratio, near, 100);	// TODO: Far 100 is hardcoded
+	private void computeProjMatrix3D(float [] matrix3D) {
+//		float ratio = (float) mWidth / (float) mHeight;
+//		float near = 0.1f;
+//		Matrix.frustumM(matrix3D, 0, -near, near, -near / ratio, near / ratio, near, 100);
+
+        if (mCamera == null) {
+            return;
+        }
+
+        float FOV = mCamera.getFOV();
+        final float near = mCamera.getNear();
+        final float far = mCamera.getFar();
+        float ratio = (float) getWidth() / (float) getHeight();
+        Matrix.perspectiveM(matrix3D, 0, FOV, ratio, near, far);
+
+        // Rotation
+        float ox = -mCamera.getRotX();
+        float oy = -mCamera.getRotY();
+        float oz = -mCamera.getRotZ();
+        if (ox != 0)
+            Matrix.rotateM(matrix3D, 0, ox, 1, 0, 0);
+        if (oy != 0)
+            Matrix.rotateM(matrix3D, 0, oy, 0, 1, 0);
+        if (oz != 0)
+            Matrix.rotateM(matrix3D, 0, oz, 0, 0, 1);
+
+        // Translation
+        float x = -mCamera.getPosX();
+        float y = -mCamera.getPosY();
+        float z = -mCamera.getPosZ();
+        Matrix.translateM(matrix3D, 0, x, y, z);
+
+        mCamera.setDirty(false);
 	}
 
 	@Override
