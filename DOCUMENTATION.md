@@ -115,10 +115,6 @@ public class MainActivity extends AppCompatActivity implements SmartGLViewContro
     public void onPrepareView(SmartGLView smartGLView) {
 
         SmartGLRenderer renderer = smartGLView.getSmartGLRenderer();
-
-        RenderPassObject3D renderPassObject3D = new RenderPassObject3D();
-        renderer.addRenderPass(renderPassObject3D);
-
         RenderPassSprite renderPassSprite = new RenderPassSprite();
         renderer.addRenderPass(renderPassSprite);
 
@@ -169,9 +165,53 @@ public class MainActivity extends AppCompatActivity implements SmartGLViewContro
 }
 ```
 
+Now let's add some 3D Objects ! There is a **ObjectReader** that can load Wavefront Obj files. 
+
+See [Wave Front format on Wikipedia](https://en.wikipedia.org/wiki/Wavefront_.obj_file).
+
+```java
+public class MainActivity extends AppCompatActivity implements SmartGLViewController {
+
+    private Object3D mLastLoadedObject;
+
+    @Override
+    public void onPrepareView(SmartGLView smartGLView) {
+
+        // ...
+
+        RenderPassObject3D renderPassObject3D = new RenderPassObject3D();
+        renderer.addRenderPass(renderPassObject3D);
+
+        ObjectReader reader = new ObjectReader();
+        ArrayList<Object3D> loadedObjects = reader.readRawResource(context, R.raw.bus, mSpriteTexture);
+        for(Object3D object3D : loadedObjects) {
+            object3D.setPos(0, 0, -50);
+            object3D.setScale(0.1f, 0.1f, 0.1f);
+            renderPassObject3D.addObject(object3D);
+            mLastLoadedObject = object3D;
+        }
+    }
+
+    @Override
+    public void onTick(SmartGLView smartGLView) {
+
+        // ...
+        if (mLastLoadedObject != null) {
+            float rx = mLastLoadedObject.getRotX() + 100*frameDuration;
+            float ry = mLastLoadedObject.getRotY() + 77*frameDuration;
+            float rz = mLastLoadedObject.getRotZ() + 56*frameDuration;
+            mLastLoadedObject.setRotation(rx, ry, rz);
+        }
+    }
+
+}
 
 TODO:
 
+* create VBO for loaded Objects
+* create some primitives (cube, sphere)
+
+ 
 
 
 

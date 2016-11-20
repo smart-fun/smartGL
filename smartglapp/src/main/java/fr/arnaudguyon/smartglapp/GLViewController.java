@@ -2,6 +2,8 @@ package fr.arnaudguyon.smartglapp;
 
 import android.content.Context;
 
+import java.util.ArrayList;
+
 import fr.arnaudguyon.smartgl.opengl.Face3D;
 import fr.arnaudguyon.smartgl.opengl.Object3D;
 import fr.arnaudguyon.smartgl.opengl.RenderPassObject3D;
@@ -13,6 +15,7 @@ import fr.arnaudguyon.smartgl.opengl.Sprite;
 import fr.arnaudguyon.smartgl.opengl.Texture;
 import fr.arnaudguyon.smartgl.opengl.UVList;
 import fr.arnaudguyon.smartgl.opengl.VertexList;
+import fr.arnaudguyon.smartgl.tools.ObjectReader;
 import fr.arnaudguyon.smartgl.touch.TouchHelperEvent;
 
 /**
@@ -23,6 +26,7 @@ public class GLViewController implements SmartGLViewController {
 
     private Sprite mSprite;
     private Object3D mObject3D;
+    private Object3D mLastLoadedObject;
     private float mRandomSpeed;
     private float mSpeedX = 200;
     private float mSpeedY = 200;
@@ -88,6 +92,16 @@ public class GLViewController implements SmartGLViewController {
         mObject3D.setPos(0, -4, -14);   // ! clip after Z = -100
 
         renderPassObject3D.addObject(mObject3D);
+
+        ObjectReader reader = new ObjectReader();
+        ArrayList<Object3D> loadedObjects = reader.readRawResource(context, R.raw.bus, mSpriteTexture);
+        for(Object3D object3D : loadedObjects) {
+            object3D.setPos(0, 0, -50);
+            object3D.setScale(0.1f, 0.1f, 0.1f);
+            renderPassObject3D.addObject(object3D);
+            mLastLoadedObject = object3D;
+        }
+
     }
 
     @Override
@@ -172,6 +186,13 @@ public class GLViewController implements SmartGLViewController {
 //                // check position
 //            }
 
+        }
+
+        if (mLastLoadedObject != null) {
+            float rx = mLastLoadedObject.getRotX() + 100*frameDuration;
+            float ry = mLastLoadedObject.getRotY() + 77*frameDuration;
+            float rz = mLastLoadedObject.getRotZ() + 56*frameDuration;
+            mLastLoadedObject.setRotation(rx, ry, rz);
         }
 
     }
