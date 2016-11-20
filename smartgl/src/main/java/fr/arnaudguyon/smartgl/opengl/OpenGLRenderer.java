@@ -45,6 +45,8 @@ public abstract class OpenGLRenderer implements GLSurfaceView.Renderer {
 	private int mColorAttribId = -1;
 	private int mProjMatrixId = -1;
 
+    private Boolean mDoubleSided = true;
+
     // DEBUG
     private boolean mDebugMode = false;
     private Sprite mColCircleSprite;
@@ -103,6 +105,10 @@ public abstract class OpenGLRenderer implements GLSurfaceView.Renderer {
         return mCamera;
     }
 
+    public void setDoubleSided(boolean doubleSided) {
+        mDoubleSided = doubleSided;
+    }
+
     public void setDebugMode(Context context) {
         loadDebugData(context);
         mDebugMode = true;
@@ -145,6 +151,8 @@ public abstract class OpenGLRenderer implements GLSurfaceView.Renderer {
 
 		GLES20.glClearColor(mClearColor[0], mClearColor[1], mClearColor[2], mClearColor[3]);	// RGBA
 		GLES20.glClear(GLES20.GL_DEPTH_BUFFER_BIT | GLES20.GL_COLOR_BUFFER_BIT);
+
+        checkDoubleSided(gl10);
 
 		synchronized (this) {
 			
@@ -474,11 +482,20 @@ public abstract class OpenGLRenderer implements GLSurfaceView.Renderer {
 		gl.glEnable(GL10.GL_DEPTH_TEST);
 		gl.glDepthFunc(GL10.GL_LEQUAL);
 
-		//TODO: set it as option of Renderer 
-		//gl.glEnable(GL10.GL_CULL_FACE);
-		//gl.glCullFace(GL10.GL_FRONT);
-
+        checkDoubleSided(gl);
 	}
+
+    private void checkDoubleSided(GL10 gl) {
+        if (mDoubleSided != null) {
+            if (mDoubleSided.booleanValue()) {
+                gl.glDisable(GL10.GL_CULL_FACE);
+            } else {
+                gl.glEnable(GL10.GL_CULL_FACE);
+                gl.glCullFace(GL10.GL_FRONT);
+            }
+            mDoubleSided = null;    // applied
+        }
+    }
 
 	private void computeFps() {
 		long newTime = SystemClock.uptimeMillis();

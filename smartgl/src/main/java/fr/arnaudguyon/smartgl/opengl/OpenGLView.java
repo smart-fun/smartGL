@@ -4,10 +4,6 @@ import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.util.AttributeSet;
 
-// TODO for library
-// set default Matrix, and add function set3DMatrix or setCameraPosition/Orientation(2d / 3d pos)
-// put all in same package, so that package functions are not accessible from outside, only public
-
 /* package */ abstract class OpenGLView extends GLSurfaceView {
 
 	private OpenGLRenderer	mOpenGLRenderer;

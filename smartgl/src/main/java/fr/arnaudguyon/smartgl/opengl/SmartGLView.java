@@ -147,7 +147,7 @@ public class SmartGLView extends OpenGLView {
 	@Override
     protected void acquireResources() {
 		super.acquireResources();
-		activateTouch(true);    // TODO: only if necessary
+		activateTouch(true);
         if (mListener != null) {
             mListener.onPrepareView(this);
         }
