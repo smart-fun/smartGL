@@ -92,4 +92,6 @@ public class RenderPass {
 		mRenderObjects.clear();
 	}
 
+    /* package */ void sortObjects() {}
+
 }

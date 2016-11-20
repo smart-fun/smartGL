@@ -19,7 +19,7 @@ public class Sprite extends RenderObject {
     private float mScaleY = 1;
 	private SpriteTouchListener mTouchListener;
     private SparseArray<ArrayList<Collision>> mCollisions;  // Type of Collision -> list of Collision
-    //private ArrayList<Collision> mCollisions;
+    private int mDisplayPriority = 1;   // used to sort sprites, 1 is higher priority than 2
 
 	public boolean handlesInput() {
 		return (mTouchListener != null);
@@ -162,6 +162,13 @@ public class Sprite extends RenderObject {
             invalidMatrix();
 		}
 	}
+
+    final public void setDisplayPriority(int distanceZ) {
+        mDisplayPriority = distanceZ;
+    }
+    final public int getDisplayPriority() {
+        return mDisplayPriority;
+    }
 	
 	final public float moveX(float dx) {
         if (dx != 0) {

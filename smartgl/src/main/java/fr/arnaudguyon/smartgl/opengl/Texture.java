@@ -64,7 +64,7 @@ public class Texture {
 		mHeight = mBitmap.getHeight();
 	}
 
-	public boolean bindTexture() {
+	boolean bindTexture() {
 		if ((mBitmap != null) && (!mBitmap.isRecycled())) {
 			GLES20.glGenTextures(1, mId, 0);
 			GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, mId[0]);
@@ -82,7 +82,15 @@ public class Texture {
 		return false;
 	}
 
-	public void unbindTexture() {
+    public void release() {
+        unbindTexture();
+        if ((mBitmap != null) && !mBitmap.isRecycled()) {
+            mBitmap.recycle();
+            mBitmap = null;
+        }
+    }
+
+	void unbindTexture() {
 		if (isBinded()) {
 			GLES20.glDeleteTextures(1, mId, 0);
 			mId[0] = UNBIND_VALUE;

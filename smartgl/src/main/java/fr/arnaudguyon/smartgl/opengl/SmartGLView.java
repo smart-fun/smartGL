@@ -28,7 +28,6 @@ public class SmartGLView extends OpenGLView {
 
     public void setDefaultRenderer(@NonNull Context context) {
         SmartGLRenderer renderer = new SmartGLRenderer(context);
-        renderer.setClearColor(0,0,0, 1);   // background color (R,G,B,A)
         setRenderer(renderer);
     }
 

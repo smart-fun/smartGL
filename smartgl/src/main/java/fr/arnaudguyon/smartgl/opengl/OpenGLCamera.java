@@ -8,8 +8,8 @@ public class OpenGLCamera {
 
     private boolean mDirty = true;
 
-    private float mFOV = 50;
-    private float mNear = 0.0001f;
+    private float mFOV = 56;
+    private float mNear = 0.01f;
     private float mFar = 10000;
 
     private float mPosX;
@@ -39,12 +39,13 @@ public class OpenGLCamera {
      */
     public void setFOV(float fov) {
         mFOV = fov;
+        mDirty = true;
     }
     public float getFOV() {
         return mFOV;
     }
 
-    public void setDirty(boolean dirty) {
+    void setDirty(boolean dirty) {
         mDirty = dirty;
     }
     public boolean isDirty() {
@@ -53,12 +54,14 @@ public class OpenGLCamera {
 
     public void setNear(float near) {
         mNear = near;
+        mDirty = true;
     }
     public float getNear() {
         return mNear;
     }
     public void setFar(float far) {
         mFar = far;
+        mDirty = true;
     }
     public float getFar() {
         return mFar;

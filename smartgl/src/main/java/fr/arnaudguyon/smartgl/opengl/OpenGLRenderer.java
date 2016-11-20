@@ -183,6 +183,8 @@ public abstract class OpenGLRenderer implements GLSurfaceView.Renderer {
 						renderPass.load();
 					}
 
+                    renderPass.sortObjects();
+
 					++passNumber;
 					onPreRenderPass(gl10, passNumber);
 

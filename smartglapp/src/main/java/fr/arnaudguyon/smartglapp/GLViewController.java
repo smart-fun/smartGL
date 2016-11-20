@@ -4,8 +4,8 @@ import android.content.Context;
 
 import fr.arnaudguyon.smartgl.opengl.Face3D;
 import fr.arnaudguyon.smartgl.opengl.Object3D;
-import fr.arnaudguyon.smartgl.opengl.RenderPass;
-import fr.arnaudguyon.smartgl.opengl.ShaderTexture;
+import fr.arnaudguyon.smartgl.opengl.RenderPassObject3D;
+import fr.arnaudguyon.smartgl.opengl.RenderPassSprite;
 import fr.arnaudguyon.smartgl.opengl.SmartGLRenderer;
 import fr.arnaudguyon.smartgl.opengl.SmartGLView;
 import fr.arnaudguyon.smartgl.opengl.SmartGLViewController;
@@ -27,6 +27,8 @@ public class GLViewController implements SmartGLViewController {
     private float mSpeedX = 200;
     private float mSpeedY = 200;
 
+    private Texture mSpriteTexture;
+
     public GLViewController() {
         mRandomSpeed = (float) ((Math.random() * 50) + 100);
         if (Math.random() > 0.5f) {
@@ -39,10 +41,26 @@ public class GLViewController implements SmartGLViewController {
 
         Context context = smartGLView.getContext();
 
+        // Add RenderPass for Sprites & Object3D
+        SmartGLRenderer renderer = smartGLView.getSmartGLRenderer();
+        RenderPassObject3D renderPassObject3D = new RenderPassObject3D();
+        RenderPassSprite renderPassSprite = new RenderPassSprite();
+        renderer.addRenderPass(renderPassObject3D);
+        renderer.addRenderPass(renderPassSprite);
+
         mSprite = new Sprite(120, 120);
-        mSprite.setPos(200, 300);
         mSprite.setPivot(0.5f, 0.5f);
-        mSprite.setTexture(new Texture(context, R.drawable.planet));
+        mSprite.setPos(60, 60);
+        mSpriteTexture = new Texture(context, R.drawable.planet);
+        mSprite.setTexture(mSpriteTexture);
+        mSprite.setDisplayPriority(20);
+        renderPassSprite.addSprite(mSprite);
+
+//        Sprite sprite2= new Sprite(200, 200);
+//        sprite2.setPos(200, 200);
+//        sprite2.setDisplayPriority(19);
+//        sprite2.setTexture(new Texture(context, R.drawable.planet));
+//        renderPassSprite.addSprite(sprite2);
 
         mObject3D = new Object3D();
         Face3D face = new Face3D();
@@ -69,21 +87,13 @@ public class GLViewController implements SmartGLViewController {
         mObject3D.addFace(face);
         mObject3D.setPos(0, -4, -14);   // ! clip after Z = -100
 
-        ShaderTexture shader = new ShaderTexture();
-        RenderPass renderPass = new RenderPass();
-        renderPass.addShader(shader);
-
-        renderPass.getRenderObjects().add(mSprite);
-        renderPass.getRenderObjects().add(mObject3D);
-
-        smartGLView.getSmartGLRenderer().addRenderPass(renderPass);
+        renderPassObject3D.addObject(mObject3D);
     }
 
     @Override
     public void onReleaseView(SmartGLView smartGLView) {
-        if (mSprite != null) {
-            mSprite.releaseResources();
-            mSprite = null;
+        if (mSpriteTexture != null) {
+            mSpriteTexture.release();
         }
     }
 
@@ -98,6 +108,17 @@ public class GLViewController implements SmartGLViewController {
         SmartGLRenderer renderer = smartGLView.getSmartGLRenderer();
         float frameDuration = renderer.getFrameDuration();
         if (mSprite != null) {
+
+//            float newX = mSprite.getPosX() + (frameDuration * 100);
+//            float newY = mSprite.getPosY();
+//            if (newX > 600) {
+//                newX = 0;
+//            }
+//            mSprite.setPos(newX, newY);
+//
+//            float newRot = mSprite.getRotation() + (frameDuration * 100);
+//            mSprite.setRotation(newRot);
+//
             float angle = mSprite.getRotation() + frameDuration*mRandomSpeed;
             mSprite.setRotation(angle);
 
