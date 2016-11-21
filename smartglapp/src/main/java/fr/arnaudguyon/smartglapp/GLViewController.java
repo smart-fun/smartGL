@@ -15,6 +15,7 @@ import fr.arnaudguyon.smartgl.opengl.Sprite;
 import fr.arnaudguyon.smartgl.opengl.Texture;
 import fr.arnaudguyon.smartgl.opengl.UVList;
 import fr.arnaudguyon.smartgl.opengl.VertexList;
+import fr.arnaudguyon.smartgl.tools.ObjLoader;
 import fr.arnaudguyon.smartgl.tools.ObjectReader;
 import fr.arnaudguyon.smartgl.touch.TouchHelperEvent;
 
@@ -32,6 +33,7 @@ public class GLViewController implements SmartGLViewController {
     private float mSpeedY = 200;
 
     private Texture mSpriteTexture;
+    private Texture mObjectTexture;
 
     public GLViewController() {
         mRandomSpeed = (float) ((Math.random() * 50) + 100);
@@ -66,6 +68,9 @@ public class GLViewController implements SmartGLViewController {
 //        sprite2.setTexture(new Texture(context, R.drawable.planet));
 //        renderPassSprite.addSprite(sprite2);
 
+
+        mObjectTexture = new Texture(context, R.drawable.coloredbg);
+
         mObject3D = new Object3D();
         Face3D face = new Face3D();
         face.setTexture(new Texture(context, R.drawable.door));
@@ -93,21 +98,58 @@ public class GLViewController implements SmartGLViewController {
 
         renderPassObject3D.addObject(mObject3D);
 
-        ObjectReader reader = new ObjectReader();
-        ArrayList<Object3D> loadedObjects = reader.readRawResource(context, R.raw.bus, mSpriteTexture);
-        for(Object3D object3D : loadedObjects) {
-            object3D.setPos(0, 0, -50);
-            object3D.setScale(0.1f, 0.1f, 0.1f);
-            renderPassObject3D.addObject(object3D);
-            mLastLoadedObject = object3D;
-        }
+//        ObjectReader reader = new ObjectReader();
+//        ArrayList<Object3D> loadedObjects = reader.readRawResource(context, R.raw.bus, mSpriteTexture);
+//        for(Object3D object3D : loadedObjects) {
+//            object3D.setPos(0, 0, -50);
+//            object3D.setScale(0.1f, 0.1f, 0.1f);
+//            renderPassObject3D.addObject(object3D);
+//            mLastLoadedObject = object3D;
+//        }
 
+
+        // CUBE (6 faces before triangle strip optim)
+        ObjLoader loader = new ObjLoader();
+        loader.loadObject(context, R.raw.crate);
+        Object3D obj = loader.toObject3D();
+        for(Face3D face3D : obj.getFaces()) {
+            face3D.setTexture(mObjectTexture);
+        }
+        obj.setPos(0, 0, -5);
+        renderPassObject3D.addObject(obj);
+        mLastLoadedObject = obj;
+
+//        // SPACESHIP (116 faces before triangle strip optim)
+//        ObjLoader loader = new ObjLoader();
+//        loader.loadObject(context, R.raw.spaceship);
+//        Object3D obj = loader.toObject3D();
+//        for(Face3D face3D : obj.getFaces()) {
+//            face3D.setTexture(mObjectTexture);
+//        }
+//        obj.setPos(0, 0, -8);
+//        renderPassObject3D.addObject(obj);
+//        mLastLoadedObject = obj;
+
+//        // BUS (2794 faces before triangle strip optim)
+//        ObjLoader loader = new ObjLoader();
+//        loader.loadObject(context, R.raw.bus);
+//        Object3D obj = loader.toObject3D();
+//        for(Face3D face3D : obj.getFaces()) {
+//            face3D.setTexture(mObjectTexture);
+//        }
+//        obj.setScale(0.1f, 0.1f, 0.1f);
+//        obj.setPos(0, 0, -50);
+//        renderPassObject3D.addObject(obj);
+//        mLastLoadedObject = obj;
     }
 
     @Override
     public void onReleaseView(SmartGLView smartGLView) {
         if (mSpriteTexture != null) {
             mSpriteTexture.release();
+        }
+        if (mObjectTexture != null) {
+            mObjectTexture.release();
         }
     }
 

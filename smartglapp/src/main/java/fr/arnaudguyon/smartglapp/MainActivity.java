@@ -3,7 +3,9 @@ package fr.arnaudguyon.smartglapp;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+import fr.arnaudguyon.smartgl.opengl.Object3D;
 import fr.arnaudguyon.smartgl.opengl.SmartGLView;
+import fr.arnaudguyon.smartgl.tools.ObjLoader;
 
 public class MainActivity extends AppCompatActivity {
 
