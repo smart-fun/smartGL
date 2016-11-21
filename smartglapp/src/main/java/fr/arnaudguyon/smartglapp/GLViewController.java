@@ -2,8 +2,6 @@ package fr.arnaudguyon.smartglapp;
 
 import android.content.Context;
 
-import java.util.ArrayList;
-
 import fr.arnaudguyon.smartgl.opengl.Face3D;
 import fr.arnaudguyon.smartgl.opengl.Object3D;
 import fr.arnaudguyon.smartgl.opengl.RenderPassObject3D;
@@ -13,10 +11,7 @@ import fr.arnaudguyon.smartgl.opengl.SmartGLView;
 import fr.arnaudguyon.smartgl.opengl.SmartGLViewController;
 import fr.arnaudguyon.smartgl.opengl.Sprite;
 import fr.arnaudguyon.smartgl.opengl.Texture;
-import fr.arnaudguyon.smartgl.opengl.UVList;
-import fr.arnaudguyon.smartgl.opengl.VertexList;
-import fr.arnaudguyon.smartgl.tools.ObjLoader;
-import fr.arnaudguyon.smartgl.tools.ObjectReader;
+import fr.arnaudguyon.smartgl.tools.WavefrontModel;
 import fr.arnaudguyon.smartgl.touch.TouchHelperEvent;
 
 /**
@@ -27,7 +22,6 @@ public class GLViewController implements SmartGLViewController {
 
     private Sprite mSprite;
     private Object3D mObject3D;
-    private Object3D mLastLoadedObject;
     private float mRandomSpeed;
     private float mSpeedX = 200;
     private float mSpeedY = 200;
@@ -62,41 +56,7 @@ public class GLViewController implements SmartGLViewController {
         mSprite.setDisplayPriority(20);
         renderPassSprite.addSprite(mSprite);
 
-//        Sprite sprite2= new Sprite(200, 200);
-//        sprite2.setPos(200, 200);
-//        sprite2.setDisplayPriority(19);
-//        sprite2.setTexture(new Texture(context, R.drawable.planet));
-//        renderPassSprite.addSprite(sprite2);
-
-
         mObjectTexture = new Texture(context, R.drawable.coloredbg);
-
-        mObject3D = new Object3D();
-        Face3D face = new Face3D();
-        face.setTexture(new Texture(context, R.drawable.door));
-        UVList uvList = new UVList();
-        uvList.init(4);
-        uvList.add(0,1);
-        uvList.add(1,1);
-        uvList.add(0,0);
-        uvList.add(1,0);
-        uvList.finalizeBuffer();
-        face.setUVList(uvList);   // TODO: create SquareUV for simple mapping (or load object)
-
-        VertexList vertexList = new VertexList();
-        vertexList.init(4);
-        float z = 0;
-        vertexList.add(-2,0,z);
-        vertexList.add(+2,0,z);
-        vertexList.add(-2,8,z);
-        vertexList.add(+2,8,z);
-        vertexList.finalizeBuffer();
-        face.setVertexList(vertexList);   // TODO: load object or provide list
-
-        mObject3D.addFace(face);
-        mObject3D.setPos(0, -4, -14);   // ! clip after Z = -100
-
-        renderPassObject3D.addObject(mObject3D);
 
 //        ObjectReader reader = new ObjectReader();
 //        ArrayList<Object3D> loadedObjects = reader.readRawResource(context, R.raw.bus, mSpriteTexture);
@@ -108,39 +68,44 @@ public class GLViewController implements SmartGLViewController {
 //        }
 
 
-        // CUBE (6 faces before triangle strip optim)
-        ObjLoader loader = new ObjLoader();
-        loader.loadObject(context, R.raw.crate);
-        Object3D obj = loader.toObject3D();
-        for(Face3D face3D : obj.getFaces()) {
-            face3D.setTexture(mObjectTexture);
-        }
-        obj.setPos(0, 0, -5);
-        renderPassObject3D.addObject(obj);
-        mLastLoadedObject = obj;
-
-//        // SPACESHIP (116 faces before triangle strip optim)
-//        ObjLoader loader = new ObjLoader();
-//        loader.loadObject(context, R.raw.spaceship);
-//        Object3D obj = loader.toObject3D();
-//        for(Face3D face3D : obj.getFaces()) {
+//        // CUBE (6 faces before triangle strip optim. 4 optimized)
+//        loader.loadObject(context, R.raw.crate);
+//        mObject3D = loader.toObject3D();
+//        for(Face3D face3D : mObject3D.getFaces()) {
 //            face3D.setTexture(mObjectTexture);
 //        }
-//        obj.setPos(0, 0, -8);
-//        renderPassObject3D.addObject(obj);
-//        mLastLoadedObject = obj;
+//        mObject3D.setPos(0, 0, -5);
+//        renderPassObject3D.addObject(mObject3D);
 
-//        // BUS (2794 faces before triangle strip optim)
-//        ObjLoader loader = new ObjLoader();
+        // SPACESHIP (116 faces before triangle strip optim. 65 optimized)
+        WavefrontModel model = new WavefrontModel.Builder(context, R.raw.spaceship)
+                .optimize(true)
+                .addTexture("Base", mObjectTexture)
+                .addTexture("Black", mSpriteTexture)
+                .create();
+        mObject3D = model.toObject3D();
+        mObject3D.setPos(0, 0, -8);// TODO: put in Builder + rotation and scale?
+        renderPassObject3D.addObject(mObject3D);
+
+//        // CAR (? faces before triangle strip optim. ? optimized)
+//        Texture carTexture = new Texture(context, R.drawable.car);
+//        WavefrontModel model = new WavefrontModel.Builder(context, R.raw.car)
+//                .optimize(true)
+//                .addTexture("3d.svg_auv", carTexture)
+//                .create();
+//        mObject3D = model.toObject3D();
+//        mObject3D.setPos(0, 0, -8);// TODO: put in Builder + rotation and scale?
+//        renderPassObject3D.addObject(mObject3D);
+
+//        // BUS (2794 faces before triangle strip optim. 2632 optimized)
 //        loader.loadObject(context, R.raw.bus);
-//        Object3D obj = loader.toObject3D();
-//        for(Face3D face3D : obj.getFaces()) {
+//        mObject3D = loader.toObject3D();
+//        for(Face3D face3D : mObject3D.getFaces()) {
 //            face3D.setTexture(mObjectTexture);
 //        }
-//        obj.setScale(0.1f, 0.1f, 0.1f);
-//        obj.setPos(0, 0, -50);
-//        renderPassObject3D.addObject(obj);
-//        mLastLoadedObject = obj;
+//        mObject3D.setScale(0.1f, 0.1f, 0.1f);
+//        mObject3D.setPos(0, 0, -50);
+//        renderPassObject3D.addObject(mObject3D);
     }
 
     @Override
@@ -165,16 +130,6 @@ public class GLViewController implements SmartGLViewController {
         float frameDuration = renderer.getFrameDuration();
         if (mSprite != null) {
 
-//            float newX = mSprite.getPosX() + (frameDuration * 100);
-//            float newY = mSprite.getPosY();
-//            if (newX > 600) {
-//                newX = 0;
-//            }
-//            mSprite.setPos(newX, newY);
-//
-//            float newRot = mSprite.getRotation() + (frameDuration * 100);
-//            mSprite.setRotation(newRot);
-//
             float angle = mSprite.getRotation() + frameDuration*mRandomSpeed;
             mSprite.setRotation(angle);
 
@@ -218,23 +173,10 @@ public class GLViewController implements SmartGLViewController {
         }
 
         if (mObject3D != null) {
-            float angle = mObject3D.getRotY() + frameDuration*mRandomSpeed;
-            mObject3D.setRotation(0, angle, 0);
-
-//            float[] windowPos = new float[3];
-//            float[] vertexPos = mObject3D.getFaces().get(0).getVertexList().getInternalBuffer();
-//            boolean success = Tools.worldToScreen(renderer, vertexPos, windowPos);
-//            if (success) {
-//                // check position
-//            }
-
-        }
-
-        if (mLastLoadedObject != null) {
-            float rx = mLastLoadedObject.getRotX() + 100*frameDuration;
-            float ry = mLastLoadedObject.getRotY() + 77*frameDuration;
-            float rz = mLastLoadedObject.getRotZ() + 56*frameDuration;
-            mLastLoadedObject.setRotation(rx, ry, rz);
+            float rx = mObject3D.getRotX() + 50*frameDuration;
+            float ry = mObject3D.getRotY() + 37*frameDuration;
+            float rz = mObject3D.getRotZ() + 26*frameDuration;
+            mObject3D.setRotation(rx, ry, rz);
         }
 
     }
