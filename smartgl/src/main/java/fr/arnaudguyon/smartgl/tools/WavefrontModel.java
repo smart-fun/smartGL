@@ -22,18 +22,20 @@ import fr.arnaudguyon.smartgl.opengl.VertexList;
 
 public class WavefrontModel {
 
+    private static final String TAG = "WavefrontModel";
+
     public static class Builder {
         Context mContext;
         int mRawResourceId;
-        boolean mOptimize = false;
+        boolean mOptimizeModel = true;
         HashMap<String, Texture> mTextures = new HashMap<>();
 
         public Builder(Context context, int rawFileResourceId) {
             mContext = context;
             mRawResourceId = rawFileResourceId;
         }
-        public Builder optimize(boolean optimize) {
-            mOptimize = optimize;
+        public Builder optimize(boolean optimizeModel) {
+            mOptimizeModel = optimizeModel;
             return this;
         }
         public Builder addTexture(String textureName, Texture texture) {
@@ -44,15 +46,14 @@ public class WavefrontModel {
         public WavefrontModel create() {
             WavefrontModel wavefront = new WavefrontModel();
             wavefront.loadObject(mContext, mRawResourceId);
-            if (mOptimize) {
-                wavefront.optimize();
+            if (mOptimizeModel) {
+                wavefront.mergeStrips();
             }
             wavefront.mTextures = mTextures;
             return wavefront;
         }
 
     }
-
 
     private static class IndexInfo {
         int mVertexIndex;
@@ -81,43 +82,8 @@ public class WavefrontModel {
         void addIndex(IndexInfo indexInfo) {
             mIndexes.add(indexInfo);
         }
-
-        Strip reverse() {
-            Strip strip = new Strip(mTextureName);
-            for(IndexInfo indexInfo : mIndexes) {
-                strip.mIndexes.add(0, indexInfo);
-            }
-            return strip;
-        }
-    }
-
-    // class used in optimization phase to compare parts of Strips to collide them if they match
-    private static class IndexPair {
-        int mIndex0;
-        int mIndex1;
-
-        IndexPair(int index0, int index1) {
-            mIndex0 = index0;
-            mIndex1 = index1;
-        }
-
-        static IndexPair startOf(Strip strip) {
-            IndexInfo indexInfo0 = strip.mIndexes.get(0);
-            IndexInfo indexInfo1 = strip.mIndexes.get(1);
-            return new IndexPair(indexInfo0.mVertexIndex, indexInfo1.mVertexIndex);
-        }
-        static IndexPair endOf(Strip strip) {
-            int size = strip.mIndexes.size();
-            IndexInfo indexInfo0 = strip.mIndexes.get(size - 2);
-            IndexInfo indexInfo1 = strip.mIndexes.get(size - 1);
-            return new IndexPair(indexInfo0.mVertexIndex, indexInfo1.mVertexIndex);
-        }
-
-        boolean isSame(IndexPair other) {
-            return ((mIndex0 == other.mIndex0) && (mIndex1 == other.mIndex1));
-        }
-        boolean isOpposite(IndexPair other) {
-            return ((mIndex0 == other.mIndex1) && (mIndex1 == other.mIndex0));
+        void addAll(ArrayList<IndexInfo> indexes) {
+            mIndexes.addAll(indexes);
         }
     }
 
@@ -158,7 +124,7 @@ public class WavefrontModel {
     private ArrayList<UV> mUVs = new ArrayList<>();
     private ArrayList<Normal> mNormals = new ArrayList<>();
     private ArrayList<Strip> mStrips = new ArrayList<>();
-    HashMap<String, Texture> mTextures = new HashMap<>();
+    private HashMap<String, Texture> mTextures = new HashMap<>();
 
     private WavefrontModel() {
     }
@@ -313,43 +279,91 @@ public class WavefrontModel {
         return null;
     }
 
-    private void optimize() {
+//    private void removeDuplicates() {
+//
+//        int nbDuplicateVertex = 0;
+//        int nbDuplicateUV = 0;
+//        int nbDuplicateNormals = 0;
+//
+//        SparseIntArray duplicateVertex = new SparseIntArray(mVertex.size());    // duplicated, original
+//        SparseIntArray duplicateUV = new SparseIntArray(mUVs.size());
+//        SparseIntArray duplicateNormal = new SparseIntArray(mNormals.size());
+//
+//        // VERTEX
+//        {
+//            for (int index = 0; index < mVertex.size() - 1; ++index) {
+//                Vertex vertex = mVertex.get(index);
+//                for (int iOther = index + 1; iOther < mVertex.size(); ++iOther) {
+//                    Vertex other = mVertex.get(iOther);
+//                    if (vertex.equals(other)) {
+//                        ++nbDuplicateVertex;
+//                        duplicateVertex.put(iOther, index);
+//                    }
+//                }
+//            }
+//        }
+//
+//        // MAPPING
+//        {
+//            for (int index = 0; index < mUVs.size() - 1; ++index) {
+//                UV uv = mUVs.get(index);
+//                for (int iOther = index + 1; iOther < mUVs.size(); ++iOther) {
+//                    UV other = mUVs.get(iOther);
+//                    if (uv.equals(other)) {
+//                        ++nbDuplicateUV;
+//                        duplicateUV.put(iOther, index);
+//                    }
+//                }
+//            }
+//        }
+//
+//        // NORMALS
+//        {
+//            for (int index = 0; index < mNormals.size() - 1; ++index) {
+//                Normal normal = mNormals.get(index);
+//                for (int iOther = index + 1; iOther < mNormals.size(); ++iOther) {
+//                    Normal other = mNormals.get(iOther);
+//                    if (normal.equals(other)) {
+//                        ++nbDuplicateNormals;
+//                        duplicateNormal.put(iOther, index);
+//                    }
+//                }
+//            }
+//        }
+//
+//        Log.i(TAG, nbDuplicateVertex + " duplicated Vertex found");
+//        Log.i(TAG, nbDuplicateUV + " duplicated UVs found");
+//        Log.i(TAG, nbDuplicateNormals + " duplicated Normals found");
+//
+//        // Fix them!
+//        for(Strip strip : mStrips) {
+//            ArrayList<IndexInfo> indexes = strip.mIndexes;
+//            for(IndexInfo indexInfo : indexes) {
+//                indexInfo.mVertexIndex = duplicateVertex.get(indexInfo.mVertexIndex, indexInfo.mVertexIndex);
+//                indexInfo.mUVIndex = duplicateUV.get(indexInfo.mUVIndex, indexInfo.mUVIndex);
+//                indexInfo.mNormalIndex = duplicateNormal.get(indexInfo.mNormalIndex, indexInfo.mNormalIndex);
+//            }
+//        }
+//
+//    }
+
+    // Groups Strips of same material into 1 big strip (1 triangle strip per face)
+    private void mergeStrips() {
         for(int iStrip = 0; iStrip<mStrips.size() - 1; ++iStrip) {
             Strip origin = mStrips.get(iStrip);
             String originTexture = origin.mTextureName;
-            IndexPair originStartPair = IndexPair.startOf(origin);
-            IndexPair originEndPair = IndexPair.endOf(origin);
             for(int iOther = iStrip+1; iOther<mStrips.size(); ++iOther) {
                 Strip other = mStrips.get(iOther);
                 if (originTexture.equals(other.mTextureName)) {
-                    IndexPair otherStartPair = IndexPair.startOf(other);
-                    IndexPair otherEndPair = IndexPair.endOf(other);
-                    if (originEndPair.isSame(otherStartPair)) {
-                        origin.mIndexes.addAll(other.mIndexes);
-                        mStrips.remove(iOther);
-                        --iOther;
-                        originEndPair = IndexPair.endOf(origin);
-                    } else if (originStartPair.equals(otherEndPair)) {
-                        other.mIndexes.addAll(origin.mIndexes);
-                        origin.mIndexes = other.mIndexes;
-                        mStrips.remove(iOther);
-                        --iOther;
-                        originStartPair = IndexPair.startOf(origin);
-                        originEndPair = IndexPair.endOf(origin);
-                    } else if (originEndPair.isOpposite(otherEndPair)) {
-                        origin.mIndexes.addAll(other.reverse().mIndexes);
-                        mStrips.remove(iOther);
-                        --iOther;
-                        originEndPair = IndexPair.endOf(origin);
-                    } else if (originStartPair.isOpposite(otherStartPair)) {
-                        Strip otherReverse = other.reverse();
-                        otherReverse.mIndexes.addAll(origin.mIndexes);
-                        origin.mIndexes = otherReverse.mIndexes;
-                        mStrips.remove(iOther);
-                        --iOther;
-                        originStartPair = IndexPair.startOf(origin);
-                        originEndPair = IndexPair.endOf(origin);
-                    }
+
+                    IndexInfo originLastIndex = origin.mIndexes.get(origin.mIndexes.size() - 1);
+                    IndexInfo otherFirstIndex = other.mIndexes.get(0);
+                    origin.addIndex(originLastIndex);
+                    origin.addIndex(otherFirstIndex);
+                    origin.addAll(other.mIndexes);
+
+                    mStrips.remove(iOther);
+                    --iOther;
                 }
             }
         }
@@ -391,5 +405,4 @@ public class WavefrontModel {
         return object3D;
     }
 
-    // TODO: log what optimize has done
 }
