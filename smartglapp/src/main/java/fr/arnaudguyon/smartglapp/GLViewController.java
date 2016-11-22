@@ -47,10 +47,11 @@ public class GLViewController implements SmartGLViewController {
         renderer.addRenderPass(renderPassObject3D);
         renderer.addRenderPass(renderPassSprite);
 
+        mSpriteTexture = new Texture(context, R.drawable.planet);
+
         mSprite = new Sprite(120, 120);
         mSprite.setPivot(0.5f, 0.5f);
         mSprite.setPos(60, 60);
-        mSpriteTexture = new Texture(context, R.drawable.planet);
         mSprite.setTexture(mSpriteTexture);
         mSprite.setDisplayPriority(20);
         renderPassSprite.addSprite(mSprite);

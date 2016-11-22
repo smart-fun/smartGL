@@ -94,10 +94,6 @@ public abstract class RenderObject implements IShaderTextureFade {
 		mFaces.clear();
 	}
 
-	public int getProgramIndex(Face3D face) {
-		return 0;
-	}
-
 	public void releaseTextures() {
 		Vector<Face3D> faces = getFaces();
 		final int faceSize = faces.size();

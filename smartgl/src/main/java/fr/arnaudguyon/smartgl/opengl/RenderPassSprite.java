@@ -13,7 +13,7 @@ public class RenderPassSprite extends RenderPass {
     public RenderPassSprite() {
         super(false, false);
         ShaderTexture shader = new ShaderTexture();
-        addShader(shader);
+        setShader(shader);
     }
 
     public void addSprite(Sprite sprite) {

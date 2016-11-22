@@ -84,10 +84,6 @@ public class Face3D {
 			mColorList = null;
 		}
 	}
-
-	public int getProgramIndex(RenderObject renderObject) {
-		return renderObject.getProgramIndex(this);
-	}
 	
 	public boolean shouldDisplay(OpenGLRenderer renderer) {
 		return mVisible;

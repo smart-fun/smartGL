@@ -1,6 +1,6 @@
 package fr.arnaudguyon.smartgl.opengl;
 
-import java.util.Vector;
+import java.util.ArrayList;
 
 import android.os.SystemClock;
 
@@ -20,12 +20,11 @@ public class AnimatedFace3D extends Face3D {
 	}
 	
 	private int mFrameNumber;
-	private Vector<Frame> mFrames;
+	private ArrayList<Frame> mFrames = new ArrayList<>();
 	private long mNextChangeDate;
 	
 	public AnimatedFace3D(AnimatedFaceListener owner) { // owner just to be conscious of implementing listener
 		super();
-		mFrames = new Vector<>();
 	}
 	
 	public void addFrame(float duration, UVList uvs) {

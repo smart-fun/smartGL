@@ -8,34 +8,32 @@ import android.opengl.GLES20;
 public class RenderPass {
 	private final static int NOPROGRAM = 0;
 
-	private Vector<Integer> mProgramId;
-	private Vector<Shader> mShaders;
-	private Vector<RenderObject> mRenderObjects;
-	private boolean mUseZBuffer;
-	private boolean mClearZBuffer;
+	private int mProgramId = NOPROGRAM;
+	private Shader mShaders;
+	private Vector<RenderObject> mRenderObjects = new Vector<>();
+	private boolean mUseZBuffer = false;
+	private boolean mClearZBuffer = false;
 	
-	public boolean isLoaded() {
-		return ((mProgramId.size() > 0) && (mProgramId.firstElement() != NOPROGRAM));
+	/* package */ boolean isLoaded() {
+		return (mProgramId != NOPROGRAM);
 	}
-	public void load() {
-		Assert.assertTrue(!isLoaded());
-		for(int i=0; i<mShaders.size(); ++i) {
-			final int programId = GLES20.glCreateProgram();
-			
-			Assert.assertTrue(programId != 0);
-			final Shader shader = mShaders.get(i);
-			if (!shader.isLoaded()) {
-				shader.loadShader(programId);
-			}
-			GLES20.glAttachShader(programId, shader.getVertexScriptId());
-			GLES20.glAttachShader(programId, shader.getPixelScriptId());
-			GLES20.glLinkProgram(programId);
-			int[] linkStatus = new int[1];
-			GLES20.glGetProgramiv(programId, GLES20.GL_LINK_STATUS, linkStatus, 0);
-			Assert.assertTrue(linkStatus[0] == GLES20.GL_TRUE);
-			shader.init(programId);
 
-			mProgramId.add(programId);
+	/* package */ void load() {
+		Assert.assertTrue(!isLoaded());
+		if (mShaders != null) {
+			mProgramId = GLES20.glCreateProgram();
+			
+			Assert.assertTrue(mProgramId != NOPROGRAM);
+			if (!mShaders.isLoaded()) {
+				mShaders.loadShader(mProgramId);
+			}
+			GLES20.glAttachShader(mProgramId, mShaders.getVertexScriptId());
+			GLES20.glAttachShader(mProgramId, mShaders.getPixelScriptId());
+			GLES20.glLinkProgram(mProgramId);
+			int[] linkStatus = new int[1];
+			GLES20.glGetProgramiv(mProgramId, GLES20.GL_LINK_STATUS, linkStatus, 0);
+			Assert.assertTrue(linkStatus[0] == GLES20.GL_TRUE);
+			mShaders.init(mProgramId);
 		}
 	}
 
@@ -56,11 +54,6 @@ public class RenderPass {
 	}
 
 	public RenderPass() {
-		mUseZBuffer = false;
-		mClearZBuffer = false;
-		mProgramId = new Vector<Integer>();
-		mRenderObjects = new Vector<RenderObject>();
-		mShaders = new Vector<Shader>();
 	}
 
 	public RenderPass(boolean useZBuffer, boolean clearZBuffer) {
@@ -69,18 +62,16 @@ public class RenderPass {
 		mClearZBuffer = clearZBuffer;
 	}
 
-	public void addShader(Shader shader) {
-		mShaders.add(shader);
+	public void setShader(Shader shader) {
+		mShaders = shader;
 	}
 
-	public int getProgramId(int progNumber) {
-		Assert.assertTrue(progNumber < mShaders.size());
-		return mProgramId.get(progNumber);
+	public int getProgramId() {
+		return mProgramId;
 	}
 
-	public Shader getShader(int progNumber) {
-		Assert.assertTrue(progNumber < mShaders.size());
-		return mShaders.get(progNumber);
+	public Shader getShader() {
+		return mShaders;
 	}
 
 	public void releaseResources() {

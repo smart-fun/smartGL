@@ -111,17 +111,20 @@ Let's start with a simple **Sprite** using a **Texture** (picture) loaded from t
 ```java
 public class MainActivity extends AppCompatActivity implements SmartGLViewController {
 
+    private Texture mSpriteTexture;
+    
     @Override
     public void onPrepareView(SmartGLView smartGLView) {
 
         SmartGLRenderer renderer = smartGLView.getSmartGLRenderer();
         RenderPassSprite renderPassSprite = new RenderPassSprite();
-        renderer.addRenderPass(renderPassSprite);
+        renderer.addRenderPass(renderPassSprite);  // add it only once for all Sprites
+
+        mSpriteTexture = new Texture(context, R.drawable.planet);
 
         mSprite = new Sprite(120, 120);	// 120 x 120 pixels
         mSprite.setPivot(0.5f, 0.5f);  // position / rotation axis in the middle of the sprite
         mSprite.setPos(60, 60);
-        mSpriteTexture = new Texture(context, R.drawable.planet);
         mSprite.setTexture(mSpriteTexture);
         renderPassSprite.addSprite(mSprite);
     }
@@ -165,14 +168,22 @@ public class MainActivity extends AppCompatActivity implements SmartGLViewContro
 }
 ```
 
-Now let's add some 3D Objects ! There is a **ObjectReader** that can load Wavefront Obj files. 
+Now let's add a moving 3D Object! There is a **WavefrontModel** that can load Wavefront models from an .obj file.
 
 See [Wave Front format on Wikipedia](https://en.wikipedia.org/wiki/Wavefront_.obj_file).
+
+The WavefrontModel.Builder is used to load the model and convert it into a Object3D. For each material used in the model, you will have to assign a corresponding Texture (see AddTexture).
+
+There is no standard unity for the size of the models, so when you load different models you'll probably have to scale them so that they look the correct size compared to each other. You can use **setScale()** for that.
+The Camera is by default at (0,0,0) and looking to -Z direction. If you want your objects visible for the camera, you need to put them in front of it, using something like **setPos(0,0,-10)**.
+
+TODO: describe Axis & Camera
 
 ```java
 public class MainActivity extends AppCompatActivity implements SmartGLViewController {
 
-    private Object3D mLastLoadedObject;
+    private Object3D mSpaceship;
+    private Texture mShipTexture;
 
     @Override
     public void onPrepareView(SmartGLView smartGLView) {
@@ -180,39 +191,45 @@ public class MainActivity extends AppCompatActivity implements SmartGLViewContro
         // ...
 
         RenderPassObject3D renderPassObject3D = new RenderPassObject3D();
-        renderer.addRenderPass(renderPassObject3D);
+        renderer.addRenderPass(renderPassObject3D);  // add it only once for all 3D Objects
+        
+        mShipTexture = new Texture(context, R.drawable.ship_picture);
 
-        ObjectReader reader = new ObjectReader();
-        ArrayList<Object3D> loadedObjects = reader.readRawResource(context, R.raw.bus, mSpriteTexture);
-        for(Object3D object3D : loadedObjects) {
-            object3D.setPos(0, 0, -50);
-            object3D.setScale(0.1f, 0.1f, 0.1f);
-            renderPassObject3D.addObject(object3D);
-            mLastLoadedObject = object3D;
-        }
+        WavefrontModel model = new WavefrontModel.Builder(context, R.raw.cube_obj)
+                .addTexture("Material001", mShipTexture)
+                .create();
+        mSpaceship = model.toObject3D();
+        mSpaceship.setScale(0.1f, 0.1f, 0.1f);  // Adjust the scale if object is too big / too small
+        mSpaceship.setPos(0, 0, -5);            // move the object behind the camera
+        renderPassObject3D.addObject(mSpaceship);
     }
 
     @Override
     public void onTick(SmartGLView smartGLView) {
 
         // ...
-        if (mLastLoadedObject != null) {
-            float rx = mLastLoadedObject.getRotX() + 100*frameDuration;
-            float ry = mLastLoadedObject.getRotY() + 77*frameDuration;
-            float rz = mLastLoadedObject.getRotZ() + 56*frameDuration;
-            mLastLoadedObject.setRotation(rx, ry, rz);
+        if (mSpaceship != null) {
+            float rx = mSpaceship.getRotX() + 100*frameDuration;
+            float ry = mSpaceship.getRotY() + 77*frameDuration;
+            float rz = mSpaceship.getRotZ() + 56*frameDuration;
+            mSpaceship.setRotation(rx, ry, rz);
+        }
+    
+        @Override
+        public void onReleaseView(SmartGLView smartGLView) {
+            if (mShipTexture != null) {
+                mShipTexture.release();
+            }
         }
     }
 
 }
+```
 
 TODO:
 
+* find a free textured model
 * create VBO for loaded Objects
-* create some primitives (cube, sphere)
-
- 
-
-
-
-
+* default texture VS color shader...
+* advanced use documentation: build objects, other shaders, ...
+* licence in the sources

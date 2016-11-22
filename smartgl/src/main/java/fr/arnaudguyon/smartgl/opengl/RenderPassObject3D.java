@@ -9,7 +9,7 @@ public class RenderPassObject3D extends RenderPass {
     public RenderPassObject3D() {
         super(true, true);
         ShaderTexture shader = new ShaderTexture();
-        addShader(shader);
+        setShader(shader);
     }
 
     public void addObject(Object3D object3D) {

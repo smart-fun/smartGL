@@ -263,11 +263,10 @@ public abstract class OpenGLRenderer implements GLSurfaceView.Renderer {
 			if (!face.shouldDisplay(this)) {
 				continue;
 			}
-			int programIndex = face.getProgramIndex(object);
-			GLES20.glUseProgram(renderPass.getProgramId(programIndex));
+			GLES20.glUseProgram(renderPass.getProgramId());
 
 			// Check for new Shader
-			Shader shader = renderPass.getShader(programIndex);
+			Shader shader = renderPass.getShader();
 			if (shader != mPreviousShader) {
 				mPreviousShader = shader;
 				mUseTexture = shader.useTexture();
@@ -595,6 +594,7 @@ public abstract class OpenGLRenderer implements GLSurfaceView.Renderer {
 	void onResume() {
 	}
 
+	// TODO: when create surface, unload/reload debug data (if debug mode)
     private void loadDebugData(Context context) {
         Texture colCircleTexture = new Texture(context, R.drawable.col_circle);
         mColCircleSprite = new Sprite(32,32);
