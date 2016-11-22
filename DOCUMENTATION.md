@@ -6,7 +6,7 @@ It has been used by several games and apps.
 
 ![alt text](extras/smartgl_screenshot.png?raw=true "Screenshot example")
 
-##Usage##
+##How to use##
 
 The scene is displayed inside a **SmartGLView**.
 
@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity implements SmartGLViewContro
 
 When the SmartGLView is ready, **onPrepareView(...)** is called on the SmartGLViewController. This method is the best place to prepare the scene (load textures, and add objects to the scene).
 
-When the SmartGLView is dismissed, **onReleaseView(...)** is called. This is the best place to release content from memory (like textures).
+When the SmartGLView is dismissed, **onReleaseView(...)** is called. This is the best place to release content from memory (textures must be released).
 
 If the View is resized for any reason (rotation of the device for example), **onResizeView(...)** is called.
 
@@ -102,7 +102,7 @@ public class MainActivity extends AppCompatActivity implements SmartGLViewContro
 }
 ```
 
-###Preparing the scene###
+###Playing with the Sprites###
 
 The draw pipeline includes Render passes. For example you can have 3D objects in the background pass, and Sprites in the forground pass.
 
@@ -141,6 +141,10 @@ public class MainActivity extends AppCompatActivity implements SmartGLViewContro
 
 **Congratulations!** The Sprite is displayed on your screen!
 
+![alt text](extras/sprite_screenshot.png?raw=true "Sprite on screen")
+
+###Add movement###
+
 Let's add some basic moves.
 
 Framerate vary on devices. This is why you should always take it into account when moving elements on screen.
@@ -168,16 +172,20 @@ public class MainActivity extends AppCompatActivity implements SmartGLViewContro
 }
 ```
 
-Now let's add a moving 3D Object! There is a **WavefrontModel** that can load Wavefront models from an .obj file.
+Your Sprite is now moving and rotating on the screen.
 
-See [Wave Front format on Wikipedia](https://en.wikipedia.org/wiki/Wavefront_.obj_file).
+###Playing with 3D Objects###
 
-The WavefrontModel.Builder is used to load the model and convert it into a Object3D. For each material used in the model, you will have to assign a corresponding Texture (see AddTexture).
+Now let's add a moving 3D Object! There is a **WavefrontModel** class that can load a Wavefront model from an .obj file.
+
+See eventually [Wave Front format on Wikipedia](https://en.wikipedia.org/wiki/Wavefront_.obj_file) for format definition.
+
+The **WavefrontModel.Builder** is used to load the model and convert it into a Object3D. For each material used in the model, you will have to assign a corresponding Texture (see **AddTexture()** method).
 
 There is no standard unity for the size of the models, so when you load different models you'll probably have to scale them so that they look the correct size compared to each other. You can use **setScale()** for that.
 The Camera is by default at (0,0,0) and looking to -Z direction. If you want your objects visible for the camera, you need to put them in front of it, using something like **setPos(0,0,-10)**.
 
-TODO: describe Axis & Camera
+![alt text](extras/axis.png?raw=true "World and Camera Axis")
 
 ```java
 public class MainActivity extends AppCompatActivity implements SmartGLViewController {
@@ -200,7 +208,7 @@ public class MainActivity extends AppCompatActivity implements SmartGLViewContro
                 .create();
         mSpaceship = model.toObject3D();
         mSpaceship.setScale(0.1f, 0.1f, 0.1f);  // Adjust the scale if object is too big / too small
-        mSpaceship.setPos(0, 0, -5);            // move the object behind the camera
+        mSpaceship.setPos(0, 0, -5);            // move the object in front of the camera
         renderPassObject3D.addObject(mSpaceship);
     }
 
@@ -208,6 +216,8 @@ public class MainActivity extends AppCompatActivity implements SmartGLViewContro
     public void onTick(SmartGLView smartGLView) {
 
         // ...
+
+        // add some rotation movement
         if (mSpaceship != null) {
             float rx = mSpaceship.getRotX() + 100*frameDuration;
             float ry = mSpaceship.getRotY() + 77*frameDuration;
@@ -226,10 +236,47 @@ public class MainActivity extends AppCompatActivity implements SmartGLViewContro
 }
 ```
 
-TODO:
+**Congratulations!** You know how to display and move Sprites and 3D Objects!
 
-* find a free textured model
-* create VBO for loaded Objects
-* default texture VS color shader...
-* advanced use documentation: build objects, other shaders, ...
-* licence in the sources
+![alt text](extras/2d3d_screenshot.png?raw=true "Sprite & Object 3D")
+
+## Installation with gradle
+
+Add the following maven{} line to your **PROJECT** build.gradle file
+
+```
+allprojects {
+    repositories {
+        jcenter()
+        maven { url "https://jitpack.io" }    // add this line
+    }
+}
+```
+
+Add the libary dependency to your **APP** build.gradle file
+
+```
+dependencies {
+    compile 'com.github.smart-fun:smartGL:1.0.0'    // add this line
+}
+```
+
+More advanced tutorials will be put in the Wiki later.
+
+
+##License##
+
+Copyright 2016 Arnaud Guyon
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+[http://www.apache.org/licenses/LICENSE-2.0](http://www.apache.org/licenses/LICENSE-2.0)
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+

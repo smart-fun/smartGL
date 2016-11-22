@@ -135,7 +135,7 @@ public class WavefrontModel {
         String line;
         try {
 
-            String stripTextureName = "unknown";
+            String stripTextureName = "";
             int lineNumber = 0;
             while ((line = bufferedReader.readLine()) != null) {
                 ++lineNumber;

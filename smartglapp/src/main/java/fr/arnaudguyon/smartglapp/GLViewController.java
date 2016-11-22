@@ -58,22 +58,42 @@ public class GLViewController implements SmartGLViewController {
 
         mObjectTexture = new Texture(context, R.drawable.coloredbg);
 
-        // CUBE (6 faces)
-        WavefrontModel model = new WavefrontModel.Builder(context, R.raw.crate)
-                .addTexture("Material.001", mObjectTexture)
-                .create();
-        mObject3D = model.toObject3D();
-        mObject3D.setPos(0, 0, -5);
-        renderPassObject3D.addObject(mObject3D);
-
-//        // SPACESHIP (116 faces)
-//        WavefrontModel model = new WavefrontModel.Builder(context, R.raw.spaceship)
-//                .addTexture("Base", mObjectTexture)
-//                .addTexture("Black", mSpriteTexture)
+//        // SPACE CRUISER 4 (734 faces)
+//        Texture mSpaceCruiser = new Texture(context, R.drawable.space_cruiser_4_color);
+//        WavefrontModel model = new WavefrontModel.Builder(context, R.raw.space_cruiser_obj)
+//                .addTexture("", mSpaceCruiser)
 //                .create();
 //        mObject3D = model.toObject3D();
-//        mObject3D.setPos(0, 0, -8);// TODO: put in Builder + rotation and scale?
+//        mObject3D.setScale(0.1f, 0.1f, 0.1f);
+//        mObject3D.setPos(0, 0, -7);
 //        renderPassObject3D.addObject(mObject3D);
+
+//        // SPACE FRIGATE 6 ( faces)
+//        Texture mSpaceCruiser = new Texture(context, R.drawable.space_frigate_6_color);
+//        WavefrontModel model = new WavefrontModel.Builder(context, R.raw.space_frigate_obj)
+//                .addTexture("", mSpaceCruiser)
+//                .create();
+//        mObject3D = model.toObject3D();
+//        mObject3D.setScale(0.1f, 0.1f, 0.1f);
+//        mObject3D.setPos(0, 0, -7);
+//        renderPassObject3D.addObject(mObject3D);
+
+//        // CUBE (6 faces)
+//        WavefrontModel model = new WavefrontModel.Builder(context, R.raw.cube_obj)
+//                .addTexture("Material.001", mObjectTexture)
+//                .create();
+//        mObject3D = model.toObject3D();
+//        mObject3D.setPos(0, 0, -5);
+//        renderPassObject3D.addObject(mObject3D);
+
+        // SPACESHIP (116 faces)
+        WavefrontModel model = new WavefrontModel.Builder(context, R.raw.spaceship_obj)
+                .addTexture("Base", mObjectTexture)
+                .addTexture("Black", mSpriteTexture)
+                .create();
+        mObject3D = model.toObject3D();
+        mObject3D.setPos(0, 0, -8);
+        renderPassObject3D.addObject(mObject3D);
 
 //        // BUS (2794 faces)
 //        WavefrontModel model = new WavefrontModel.Builder(context, R.raw.bus)
