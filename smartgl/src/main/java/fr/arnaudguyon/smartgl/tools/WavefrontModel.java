@@ -33,6 +33,7 @@ import fr.arnaudguyon.smartgl.opengl.VertexList;
 
 /**
  * Created by aguyon on 21.11.16.
+ * Helper to load Wavefront objects and convert them to Object3D
  */
 
 public class WavefrontModel {
@@ -384,6 +385,10 @@ public class WavefrontModel {
         }
     }
 
+    /**
+     * Converts the model to an Object3D
+     * @return an Object3D
+     */
     public Object3D toObject3D() {
 
         Object3D object3D = new Object3D();

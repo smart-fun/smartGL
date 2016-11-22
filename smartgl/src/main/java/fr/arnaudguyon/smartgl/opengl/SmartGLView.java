@@ -27,6 +27,11 @@ import android.view.View;
 import fr.arnaudguyon.smartgl.touch.TouchHelper;
 import fr.arnaudguyon.smartgl.touch.TouchHelperEvent;
 
+/**
+ * View where the OpenGL scene is displayed.
+ * Is a OpenGLView that handles the Touch and the callbacks with the SmartGLViewController
+ */
+
 public class SmartGLView extends OpenGLView {
 	
 	private TouchHelper mTouchHelper;
@@ -41,11 +46,19 @@ public class SmartGLView extends OpenGLView {
 		super(context, attrs);
 	}
 
+    /**
+     * set the SmartGLRenderer as scene renderer
+     * @param context
+     */
     public void setDefaultRenderer(@NonNull Context context) {
         SmartGLRenderer renderer = new SmartGLRenderer(context);
         setRenderer(renderer);
     }
 
+    /**
+     * returns the current SmartGLRenderer
+     * @return the current SmartGLRenderer or null if none
+     */
 	public SmartGLRenderer getSmartGLRenderer() {
         OpenGLRenderer renderer = getOpenGLRenderer();
         if (renderer instanceof SmartGLRenderer) {
@@ -54,9 +67,18 @@ public class SmartGLView extends OpenGLView {
 		return null;
 	}
 
+    /**
+     * set the SmartGLViewController
+     * @param controller
+     */
     public void setController(SmartGLViewController controller) {
         mListener = controller;
     }
+
+    /**
+     * gets the SmartGLViewController
+     * @return
+     */
     public SmartGLViewController getController() {
         return mListener;
     }
@@ -70,12 +92,22 @@ public class SmartGLView extends OpenGLView {
 		return true;
 	}
 
+    /**
+     * to call if there is an Android view on top of the SmartGLView and there is a need that the SmartGL view handles the touch.
+     * It propagates the touch to the SmartGLView.
+     * @param fromView an Android View
+     * @param event the touch event received in this view
+     */
     public void onTouchEventFromOtherView(View fromView, MotionEvent event) {
         if (mTouchHelper != null) {
             mTouchHelper.onTouchEvent(fromView, event, true);
         }
     }
 
+    /**
+     * called at every frame of OpenGL. Handles the Touch Events
+     * @param renderer
+     */
 	@Override
 	public void onPreRender(OpenGLRenderer renderer) {
 		super.onPreRender(renderer);
@@ -176,6 +208,10 @@ public class SmartGLView extends OpenGLView {
         }
 	}
 
+    /**
+     * Enable or Disable the Touch events on the view
+     * @param activate true to enable the Touch, false to disable the Touch
+     */
 	public void activateTouch(boolean activate) {
         if (activate) {
             mTouchHelper = new TouchHelper();

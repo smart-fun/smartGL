@@ -1,6 +1,6 @@
 #SmartGL for Android#
 
-**SmartGL** is an Android Studio library that simplifies the use of **OpenGL** to display **2D Sprites** and **3D Textured Objects**.
+**SmartGL** is an Android Studio library that uses **OpenGL** to display **2D Sprites** and **3D Textured Objects**.
 
 It has been used by several games and apps.
 
@@ -240,6 +240,8 @@ public class MainActivity extends AppCompatActivity implements SmartGLViewContro
 
 ![alt text](extras/2d3d_screenshot.png?raw=true "Sprite & Object 3D")
 
+More advanced Tutorials will be put in the Wiki later.
+
 ## Installation with gradle
 
 Add the following maven{} line to your **PROJECT** build.gradle file
@@ -260,9 +262,6 @@ dependencies {
     compile 'com.github.smart-fun:smartGL:1.0.0'    // add this line
 }
 ```
-
-More advanced tutorials will be put in the Wiki later.
-
 
 ##License##
 

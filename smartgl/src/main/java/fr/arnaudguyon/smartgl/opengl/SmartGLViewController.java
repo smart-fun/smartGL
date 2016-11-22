@@ -21,10 +21,38 @@ import fr.arnaudguyon.smartgl.touch.TouchHelperEvent;
  * Created by arnaud on 19/11/2016.
  */
 
+/**
+ * Interface which interacts with the SmartGLView
+ */
 public interface SmartGLViewController {
+    /**
+     * called when the SmartGLView is ready for display
+     * @param smartGLView
+     */
     void onPrepareView(SmartGLView smartGLView);
+
+    /**
+     * called with the SmartGLView is about to dismiss
+     * @param smartGLView
+     */
     void onReleaseView(SmartGLView smartGLView);
+
+    /**
+     * called when the view is resized
+     * @param smartGLView
+     */
     void onResizeView(SmartGLView smartGLView);
+
+    /**
+     * called at every OpenGL frame
+     * @param smartGLView
+     */
     void onTick(SmartGLView smartGLView);
+
+    /**
+     * called after a user touch interaction
+     * @param smartGLView
+     * @param event
+     */
     void onTouchEvent(SmartGLView smartGLView, TouchHelperEvent event);
 }

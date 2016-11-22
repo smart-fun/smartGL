@@ -35,6 +35,11 @@ import junit.framework.Assert;
 import fr.arnaudguyon.smartgl.R;
 import fr.arnaudguyon.smartgl.math.Vector2D;
 
+/**
+ * Base class for the Renderer. Handles the list of the RenderObject to display, the camera.
+ * Do the render.
+ */
+
 public abstract class OpenGLRenderer implements GLSurfaceView.Renderer {
 
 	private WeakReference<OpenGLView> mOpenGLView;
