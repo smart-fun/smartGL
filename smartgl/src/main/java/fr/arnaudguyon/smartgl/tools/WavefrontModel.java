@@ -65,9 +65,9 @@ public class WavefrontModel {
                 return null;
             }
             IndexInfo indexInfo = new IndexInfo();
-            indexInfo.mVertexIndex = vertexIndex.intValue();
-            indexInfo.mUVIndex = (uvIndex != null) ? uvIndex.intValue() : 0;
-            indexInfo.mNormalIndex = (normalIndex != null) ? normalIndex.intValue() : 0;
+            indexInfo.mVertexIndex = vertexIndex - 1;
+            indexInfo.mUVIndex = (uvIndex != null) ? uvIndex - 1 : 0;
+            indexInfo.mNormalIndex = (normalIndex != null) ? normalIndex - 1 : 0;
             return indexInfo;
         }
     }
@@ -272,7 +272,7 @@ public class WavefrontModel {
         if ((parts != null) && (parts.length > part)) {
             String firstString = parts[part];
             try {
-                return Integer.parseInt(firstString) - 1;   // TODO: this is because indexes start to 1, but put somewhere else or rename
+                return Integer.parseInt(firstString);
             } catch (NumberFormatException exception) {
             }
         }
