@@ -23,7 +23,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import fr.arnaudguyon.smartgl.opengl.OpenGLCamera;
 import fr.arnaudguyon.smartgl.opengl.SmartGLView;
 
 /**
@@ -45,12 +44,38 @@ public class MainGLFragment extends Fragment {
         final Context context = view.getContext();
         mFragmentGLView = (SmartGLView) view.findViewById(R.id.fragmentGLView);
         mFragmentGLView.setDefaultRenderer(context);
-        mFragmentGLView.setController(new GLViewController());
+        final GLViewController controller = new GLViewController();
+        mFragmentGLView.setController(controller);
 
-        OpenGLCamera camera = mFragmentGLView.getSmartGLRenderer().getCamera();
-        camera.setFOV(90);
-        camera.setPosition(0, 0, -4);
-        camera.setRotation(0, 0, 20f);
+        View cruiserButton = view.findViewById(R.id.cruiserButton);
+        cruiserButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                controller.putSpaceCruiser(context);
+            }
+        });
+        View fregateButton = view.findViewById(R.id.fregateButton);
+        fregateButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                controller.putSpaceFrigate(context);
+            }
+        });
+        View busButton = view.findViewById(R.id.busButton);
+        busButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                controller.putBus(context);
+            }
+        });
+        View cubeButton = view.findViewById(R.id.cubeButton);
+        cubeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                controller.putColoredCube(context);
+            }
+        });
+
 
     }
 

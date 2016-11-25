@@ -12,8 +12,37 @@
 
     <fr.arnaudguyon.smartgl.opengl.SmartGLView
         android:id="@+id/fragmentGLView"
-        android:layout_width="200dp"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_weight="100"
         android:layout_gravity="center_horizontal" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/cruiserButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="CRUISER"/>
+        <Button
+            android:id="@+id/fregateButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="FREGATE"/>
+        <Button
+            android:id="@+id/busButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="BUS"/>
+        <Button
+            android:id="@+id/cubeButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="CUBE"/>
+
+    </LinearLayout>
 
 </LinearLayout>
