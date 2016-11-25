@@ -8,8 +8,8 @@ android {
         applicationId "fr.arnaudguyon.smartglapp"
         minSdkVersion 14
         targetSdkVersion 25
-        versionCode 14
-        versionName "1.0.2"
+        versionCode 15
+        versionName "1.0.3"
     }
     buildTypes {
         release {
