@@ -23,6 +23,7 @@ import android.graphics.Matrix;
 import android.media.ExifInterface;
 import android.opengl.GLES20;
 import android.opengl.GLUtils;
+import android.support.annotation.DrawableRes;
 
 public class Texture {
 	
@@ -71,7 +72,7 @@ public class Texture {
 		mHeight = bitmap.getHeight();
 		mBitmap = bitmap;
 	}
-	public Texture(Context context, int resourceId) {
+	public Texture(Context context, @DrawableRes int resourceId) {
 		this();
 		Resources resources = context.getResources();
 		mBitmap = BitmapFactory.decodeResource(resources, resourceId);
