@@ -240,6 +240,8 @@ public class MainActivity extends AppCompatActivity implements SmartGLViewContro
 
 ![alt text](extras/2d3d_screenshot.png?raw=true "Sprite & Object 3D")
 
+See the sample app for a complete implementation.
+
 More advanced Tutorials will be put in the Wiki later.
 
 ## Installation with gradle
@@ -259,7 +261,7 @@ Add the libary dependency to your **APP** build.gradle file
 
 ```
 dependencies {
-    compile 'com.github.smart-fun:smartGL:1.0.0'    // add this line
+    compile 'com.github.smart-fun:smartGL:1.0.1'    // add this line
 }
 ```
 
