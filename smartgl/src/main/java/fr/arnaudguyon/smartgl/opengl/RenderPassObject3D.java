@@ -21,10 +21,32 @@ package fr.arnaudguyon.smartgl.opengl;
 
 public class RenderPassObject3D extends RenderPass {
 
+    public enum ShaderType {
+        SHADER_TEXTURE,
+        SHADER_COLOR
+    }
+
     public RenderPassObject3D() {
         super(true, true);
-        ShaderTexture shader = new ShaderTexture();
-        setShader(shader);
+        setShader(ShaderType.SHADER_TEXTURE);
+    }
+    public RenderPassObject3D(ShaderType shaderType, boolean useZBuffer, boolean clearZBuffer) {
+        super(useZBuffer, clearZBuffer);
+        setShader(shaderType);
+    }
+    // TODO: see if change shader during renderpass...
+
+    private void setShader(ShaderType shaderType) {
+        switch (shaderType) {
+            case SHADER_TEXTURE:
+                ShaderTexture shaderTexture = new ShaderTexture();
+                setShader(shaderTexture);
+                break;
+            case SHADER_COLOR:
+                ShaderColor shaderColor = new ShaderColor();
+                setShader(shaderColor);
+                break;
+        }
     }
 
     public void addObject(Object3D object3D) {
