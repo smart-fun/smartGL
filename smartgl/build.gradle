@@ -7,8 +7,8 @@ android {
     defaultConfig {
         minSdkVersion 14
         targetSdkVersion 25
-        versionCode 13
-        versionName "1.0.1"
+        versionCode 14
+        versionName "1.0.2"
     }
     buildTypes {
         release {
@@ -19,6 +19,6 @@ android {
 }
 
 dependencies {
-    compile 'com.android.support:appcompat-v7:25.0.1'
+    compile 'com.android.support:support-annotations:25.0.1'
     compile fileTree(dir: 'libs', include: ['*.jar'])
 }
