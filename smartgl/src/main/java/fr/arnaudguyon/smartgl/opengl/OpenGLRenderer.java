@@ -46,7 +46,8 @@ public abstract class OpenGLRenderer implements GLSurfaceView.Renderer {
 	private int mWidth, mHeight;
 
 	private long mPreviousTime = 0;
-	private long mFrameDuration = 0;
+	private long mFrameDurationRaw = 0;
+    private float mFrameDurationSmoothed = 0.02f;
 
 	private float[] mProj3DMatrix = new float[16];
 	private float[] mProj2DMatrix = new float[16];
@@ -88,7 +89,7 @@ public abstract class OpenGLRenderer implements GLSurfaceView.Renderer {
 	}
 	
 	public float getFrameDuration() {
-		return (mFrameDuration / 1000.f);
+		return mFrameDurationSmoothed;
 	}
 
 	public float[] getProjection3DMatrix() {
@@ -521,12 +522,21 @@ public abstract class OpenGLRenderer implements GLSurfaceView.Renderer {
 	private void computeFps() {
 		long newTime = SystemClock.uptimeMillis();
 		if (mPreviousTime == 0) {
-			mFrameDuration = 20;	// consider 50 fps at start
-			mPreviousTime = newTime - mFrameDuration;
+			mFrameDurationRaw = 20;	// consider 50 fps at start
+			mPreviousTime = newTime - mFrameDurationRaw;
 		} else {
-			mFrameDuration = newTime - mPreviousTime;
+			mFrameDurationRaw = newTime - mPreviousTime;
 			mPreviousTime = newTime;
 		}
+
+        float instantFrameDurationSecond = (mFrameDurationRaw / 1000.f);
+        // avoid crazy values in case of system freeze or something
+        if (instantFrameDurationSecond < 0.001f) {
+            instantFrameDurationSecond = 0.001f;
+        } else if (instantFrameDurationSecond > 2) {
+            instantFrameDurationSecond = 2;
+        }
+        mFrameDurationSmoothed = (mFrameDurationSmoothed * 0.9f) + (instantFrameDurationSecond * 0.1f);
 	}
 	
 	public Vector<Sprite> getToucheableSprites() {
