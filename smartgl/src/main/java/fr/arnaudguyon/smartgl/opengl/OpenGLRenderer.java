@@ -618,7 +618,7 @@ public abstract class OpenGLRenderer implements GLSurfaceView.Renderer {
     void onPause() {
         synchronized (this) {
             mInitDone = false;
-            mRenderPasses.clear();
+//            mRenderPasses.clear();
         }
     }
 	void onResume() {

@@ -21,59 +21,66 @@ import android.util.AttributeSet;
 
 /* package */ abstract class OpenGLView extends GLSurfaceView {
 
-	private OpenGLRenderer	mOpenGLRenderer;
+    private OpenGLRenderer mOpenGLRenderer;
 
-	public OpenGLView(Context context, AttributeSet attrs) {
-		super(context, attrs);
-	}
+    public OpenGLView(Context context, AttributeSet attrs) {
+        super(context, attrs);
+    }
 
-	public OpenGLView(Context context) {
-		super(context);
-	}
+    public OpenGLView(Context context) {
+        super(context);
+    }
 
-	@Override
-	public void setRenderer(Renderer renderer) throws RuntimeException {
+    @Override
+    public void setRenderer(Renderer renderer) throws RuntimeException {
 
-		if (renderer instanceof OpenGLRenderer) {
-			mOpenGLRenderer = (OpenGLRenderer) renderer;
-			mOpenGLRenderer.setListener(this);
-			setEGLContextClientVersion(2);
-			ConfigGLSelector selector = new ConfigGLSelector(this);
-			if (selector != null) {
-				setEGLConfigChooser(selector);
-				//setPreserveEGLContextOnPause(true);
-				super.setRenderer(mOpenGLRenderer);
-			}
-		} else {
-			throw new RuntimeException("renderer must be a OpenGLRenderer");
-		}
-	}
-	
-	public OpenGLRenderer getOpenGLRenderer() {
-		return mOpenGLRenderer;
-	}
+        if (renderer instanceof OpenGLRenderer) {
+            mOpenGLRenderer = (OpenGLRenderer) renderer;
+            mOpenGLRenderer.setListener(this);
+            setEGLContextClientVersion(2);
+            ConfigGLSelector selector = new ConfigGLSelector(this);
+            if (selector != null) {
+                setEGLConfigChooser(selector);
+                //setPreserveEGLContextOnPause(true);
+                super.setRenderer(mOpenGLRenderer);
+            }
+        } else {
+            throw new RuntimeException("renderer must be a OpenGLRenderer");
+        }
+    }
 
-	public void onPreRender(OpenGLRenderer renderer) {
-	}
+    public OpenGLRenderer getOpenGLRenderer() {
+        return mOpenGLRenderer;
+    }
 
-	@Override
-	public void onPause() {
-		releaseResources();
-		if (mOpenGLRenderer != null) {
-			mOpenGLRenderer.onPause();
-		}
-		super.onPause();
-	}
+    public void onPreRender(OpenGLRenderer renderer) {
+    }
 
-	@Override
-	public void onResume() {
-		super.onResume();
-		if (mOpenGLRenderer != null) {
-			mOpenGLRenderer.onResume();
-		}
-	}
+    @Override
+    public void onPause() {
+        if (mOpenGLRenderer != null) {
+            mOpenGLRenderer.onPause();
+        }
+        releaseResources();
+        if (mOpenGLRenderer != null) {
+            mOpenGLRenderer.addRenderPass(null);
+        }
+        super.onPause();
+    }
 
-	protected void acquireResources() {}
-	protected void releaseResources() {}
-	protected abstract void onViewResized(int width, int height);
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (mOpenGLRenderer != null) {
+            mOpenGLRenderer.onResume();
+        }
+    }
+
+    protected void acquireResources() {
+    }
+
+    protected void releaseResources() {
+    }
+
+    protected abstract void onViewResized(int width, int height);
 }
