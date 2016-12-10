@@ -63,7 +63,7 @@ import android.util.AttributeSet;
         }
         releaseResources();
         if (mOpenGLRenderer != null) {
-            mOpenGLRenderer.addRenderPass(null);
+            mOpenGLRenderer.clearRenderPasses();
         }
         super.onPause();
     }
