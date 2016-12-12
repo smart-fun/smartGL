@@ -149,6 +149,12 @@ public abstract class OpenGLRenderer implements GLSurfaceView.Renderer {
 			mRenderPasses.add(renderPass);
 		}
 	}
+
+    void clearRenderPasses() {
+        synchronized (this) {
+            mRenderPasses.clear();
+        }
+    }
 	
 	public void removeRenderPass(RenderPass renderPass) {
 		synchronized (this) {
@@ -622,7 +628,7 @@ public abstract class OpenGLRenderer implements GLSurfaceView.Renderer {
     void onPause() {
         synchronized (this) {
             mInitDone = false;
-            mRenderPasses.clear();
+//            mRenderPasses.clear();
         }
     }
 	void onResume() {
