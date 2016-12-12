@@ -91,6 +91,9 @@ public abstract class OpenGLRenderer implements GLSurfaceView.Renderer {
 	public float getFrameDuration() {
 		return mFrameDurationSmoothed;
 	}
+	public float getRawFrameDuration() {
+		return mFrameDurationRaw;
+	}
 
 	public float[] getProjection3DMatrix() {
 		return mProj3DMatrix;
@@ -520,23 +523,24 @@ public abstract class OpenGLRenderer implements GLSurfaceView.Renderer {
     }
 
 	private void computeFps() {
+
 		long newTime = SystemClock.uptimeMillis();
-		if (mPreviousTime == 0) {
-			mFrameDurationRaw = 20;	// consider 50 fps at start
+		if (mPreviousTime == 0) {	// First frame, set standard values at 50fps
+			mFrameDurationRaw = 20;
 			mPreviousTime = newTime - mFrameDurationRaw;
-		} else {
+			mFrameDurationSmoothed = (mFrameDurationRaw / 1000.f);
+		} else {	// Other frames, let's calculate the FPS
 			mFrameDurationRaw = newTime - mPreviousTime;
 			mPreviousTime = newTime;
+			float instantFrameDurationSecond = (mFrameDurationRaw / 1000.f);
+			// normal smooth for normal values
+			if ((instantFrameDurationSecond >= 0.001f) && (instantFrameDurationSecond <= 0.5f)) {
+				mFrameDurationSmoothed = (mFrameDurationSmoothed * 0.9f) + (instantFrameDurationSecond * 0.1f);
+			} else {	// smooth more for extreme values (like starting freeze)
+				mFrameDurationSmoothed = (mFrameDurationSmoothed * 0.95f) + (instantFrameDurationSecond * 0.05f);
+			}
 		}
 
-        float instantFrameDurationSecond = (mFrameDurationRaw / 1000.f);
-        // avoid crazy values in case of system freeze or something
-        if (instantFrameDurationSecond < 0.001f) {
-            instantFrameDurationSecond = 0.001f;
-        } else if (instantFrameDurationSecond > 2) {
-            instantFrameDurationSecond = 2;
-        }
-        mFrameDurationSmoothed = (mFrameDurationSmoothed * 0.9f) + (instantFrameDurationSecond * 0.1f);
 	}
 	
 	public Vector<Sprite> getToucheableSprites() {
