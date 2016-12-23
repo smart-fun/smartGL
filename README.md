@@ -240,9 +240,13 @@ public class MainActivity extends AppCompatActivity implements SmartGLViewContro
 
 ![alt text](extras/2d3d_screenshot.png?raw=true "Sprite & Object 3D")
 
+More advanced Tutorials will be put in the Wiki later.
+
 See the sample app for a complete implementation.
 
-More advanced Tutorials will be put in the Wiki later.
+You can also download [Slippy Slope](https://play.google.com/store/apps/details?id=fr.smartfun.pingoo) game on Google Play to see what can be done using 2D Sprites (and a little 3D)
+
+![alt text](extras/slippy_small.png?raw=true "Slippy Slope")
 
 ## Installation with gradle
 
