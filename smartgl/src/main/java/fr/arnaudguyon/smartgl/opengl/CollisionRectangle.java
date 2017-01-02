@@ -113,27 +113,45 @@ public class CollisionRectangle extends Collision {
         if (circleIsInside(circle)) { // already computes position & size for both
             return true;
         } else {
-//            computePositionAndSize();
-//            circle.computePositionAndSize();
             float circlePosX = circle.getPosX();
             float circlePosY = circle.getPosY();
             float radius = circle.getRadius();
 
-            if (circlePosY - radius > mBottomPos) {
-                return false;
+            // Vertical collision in "left to right" segment
+            if (circlePosX >= mLeftPos && circlePosX <= mRightPos) {
+                if ((circlePosY + radius >= getTop()) && (circlePosY - radius <= getBottom())) {
+                    return  true;
+                }
             }
-            if (circlePosY + radius < mTopPos) {
-                return false;
+            // Horizontal collision in "top to bottom" segment
+            if (circlePosY >= mBottomPos && circlePosY <= getTop()) {
+                if ((circlePosX + radius >= mLeftPos) && (circlePosX - radius <= mRightPos)) {
+                    return  true;
+                }
             }
-            if (circlePosX - radius > mRightPos) {
-                return false;
+            // Corners
+            float leftDist2 = (mLeftPos - circlePosX) * (mLeftPos - circlePosX);
+            float topDist2 = (mTopPos - circlePosY) * (mTopPos - circlePosY);
+            float radius2 = radius * radius;
+            // Top-Left corner
+            if (leftDist2 + topDist2 < radius2) {
+                return true;
             }
-            if (circlePosX + radius < mLeftPos) {
-                return false;
+            float rightDist2 = (mRightPos - circlePosX) * (mRightPos - circlePosX);
+            // Top-Right corner
+            if (rightDist2 + topDist2 < radius2) {
+                return true;
             }
-            // "squared circle" collides square
-            // TODO: how to be more precise in angles ?
-            return true;
+            float bottomDist2 = (mBottomPos - circlePosY) * (mBottomPos - circlePosY);
+            // Bottom-Left corner
+            if (leftDist2 + bottomDist2 < radius2) {
+                return true;
+            }
+            // Bottom-Right corner
+            if (rightDist2 + bottomDist2 < radius2) {
+                return true;
+            }
+            return false;
         }
     }
 
