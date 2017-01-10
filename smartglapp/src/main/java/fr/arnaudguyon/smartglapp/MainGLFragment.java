@@ -17,6 +17,7 @@ package fr.arnaudguyon.smartglapp;
 
 import android.app.Fragment;
 import android.content.Context;
+import android.graphics.PixelFormat;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -46,6 +47,12 @@ public class MainGLFragment extends Fragment {
         mFragmentGLView.setDefaultRenderer(context);
         final GLViewController controller = new GLViewController();
         mFragmentGLView.setController(controller);
+
+//        mFragmentGLView.getHolder().setFormat(PixelFormat.TRANSLUCENT);
+
+        // Set the background to transparent, but in this case all android display is displayed behind
+        mFragmentGLView.setZOrderOnTop(true);
+        mFragmentGLView.getSmartGLRenderer().setClearColor(0,0,0,0);
 
         View cruiserButton = view.findViewById(R.id.cruiserButton);
         cruiserButton.setOnClickListener(new View.OnClickListener() {
