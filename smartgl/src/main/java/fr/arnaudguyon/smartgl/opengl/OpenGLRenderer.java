@@ -68,6 +68,9 @@ public abstract class OpenGLRenderer implements GLSurfaceView.Renderer {
 
     private Boolean mDoubleSided = true;
 
+	private static final float[] DEFAULT_AMBIANT_LIGHT = {1, 1, 1, 1};	// RVBA
+	private LightAmbiant mLightAmbiant;
+
     // DEBUG
     private boolean mDebugMode = false;
     private Sprite mColCircleSprite;
@@ -319,7 +322,7 @@ public abstract class OpenGLRenderer implements GLSurfaceView.Renderer {
 					GLES20.glEnableVertexAttribArray(mColorAttribId);
 				}
 			}
-			shader.onPreRender(object);
+			shader.onPreRender(this, object);
 
 			// Vertex
 			VertexList vertexList = face.getVertexList();
@@ -632,6 +635,19 @@ public abstract class OpenGLRenderer implements GLSurfaceView.Renderer {
         }
     }
 	void onResume() {
+	}
+
+	public void setLightAmbiant(LightAmbiant lightAmbiant) {
+		mLightAmbiant = lightAmbiant;
+	}
+
+	float[] getLightAmbiant() {
+		LightAmbiant lightAmbiant = mLightAmbiant;	// avoid multithread issues
+		if (lightAmbiant != null) {
+			return lightAmbiant.getArray();
+		} else {
+			return DEFAULT_AMBIANT_LIGHT;
+		}
 	}
 
 	// TODO: when create surface, unload/reload debug data (if debug mode)

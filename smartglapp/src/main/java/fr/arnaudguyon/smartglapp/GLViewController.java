@@ -64,7 +64,7 @@ public class GLViewController implements SmartGLViewController {
 
         // Add RenderPass for Sprites & Object3D
         SmartGLRenderer renderer = smartGLView.getSmartGLRenderer();
-        mRenderPassObject3D = new RenderPassObject3D();
+        mRenderPassObject3D = new RenderPassObject3D(RenderPassObject3D.ShaderType.SHADER_TEXTURE_AMBIANT, true, true);
         mRenderPassObject3DColor = new RenderPassObject3D(RenderPassObject3D.ShaderType.SHADER_COLOR, true, false);
         mRenderPassSprite = new RenderPassSprite();
         renderer.addRenderPass(mRenderPassObject3D);

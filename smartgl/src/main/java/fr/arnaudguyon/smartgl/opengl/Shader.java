@@ -130,7 +130,7 @@ abstract public class Shader {
 		Assert.assertTrue(mProjMatrixId >= 0);
 	}
 	
-	public void onPreRender(RenderObject object) {
+	public void onPreRender(OpenGLRenderer renderer, RenderObject object) {
 	}
 
 }

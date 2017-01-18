@@ -20,21 +20,21 @@ public class ShaderTexture extends Shader {
 	// @formatter:off
 
 	private final static String VERTEX_SHADER_TEXTURE_SCRIPT =
-		"uniform mat4 m_ProjectionMatrix;\n" +
-		"attribute vec4 m_Position;\n" +
-		"attribute vec2 m_UV;\n" +
-		"varying vec2 vTextureCoord;\n" +
-		"void main() {\n" +
-		"  gl_Position = m_ProjectionMatrix * m_Position;\n" +
-		"  vTextureCoord = m_UV;\n" +
-		"}\n";
+		"uniform mat4 m_ProjectionMatrix;" +
+		"attribute vec4 m_Position;" +
+		"attribute vec2 m_UV;" +
+		"varying vec2 vTextureCoord;" +
+		"void main() {" +
+		"  gl_Position = m_ProjectionMatrix * m_Position;" +
+		"  vTextureCoord = m_UV;" +
+		"}";
 	private final static String PIXEL_SHADER_TEXTURE_SCRIPT =
-		"precision mediump float;\n" +
-		"varying vec2 vTextureCoord;\n" +
-		"uniform sampler2D sTexture;\n" +
-		"void main() {\n" +
-		"  gl_FragColor = texture2D(sTexture, vTextureCoord);\n" +
-		"}\n";
+		"precision mediump float;" +
+		"varying vec2 vTextureCoord;" +
+		"uniform sampler2D sTexture;" +
+		"void main() {" +
+		"  gl_FragColor = texture2D(sTexture, vTextureCoord);" +
+		"}";
 
 	public ShaderTexture() {
 		super(VERTEX_SHADER_TEXTURE_SCRIPT, PIXEL_SHADER_TEXTURE_SCRIPT);
@@ -42,7 +42,7 @@ public class ShaderTexture extends Shader {
 
 	@Override public boolean useTexture()	{ return true; }
 	@Override public boolean useColor()		{ return false; }
-	
+
 	@Override protected String getVertexAttribName()		{ return "m_Position"; }
 	@Override protected String getUVAttribName()			{ return "m_UV"; }
 	@Override protected String getColorAttribName()			{ return null; }

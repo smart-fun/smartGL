@@ -23,6 +23,7 @@ public class RenderPassObject3D extends RenderPass {
 
     public enum ShaderType {
         SHADER_TEXTURE,
+        SHADER_TEXTURE_AMBIANT,
         SHADER_COLOR
     }
 
@@ -41,6 +42,10 @@ public class RenderPassObject3D extends RenderPass {
             case SHADER_TEXTURE:
                 ShaderTexture shaderTexture = new ShaderTexture();
                 setShader(shaderTexture);
+                break;
+            case SHADER_TEXTURE_AMBIANT:
+                ShaderTextureAmbiant shaderTextureAmbiant = new ShaderTextureAmbiant();
+                setShader(shaderTextureAmbiant);
                 break;
             case SHADER_COLOR:
                 ShaderColor shaderColor = new ShaderColor();
