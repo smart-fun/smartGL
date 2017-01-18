@@ -12,24 +12,34 @@
     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
     See the License for the specific language governing permissions and
     limitations under the License.
- */
+*/
 package fr.arnaudguyon.smartgl.opengl;
 
-import android.support.annotation.FloatRange;
+import android.support.annotation.NonNull;
+
+import fr.arnaudguyon.smartgl.math.Vector3D;
 
 /**
- * Ambiant Light for OpenGL
+ * Parallel Light for OpenGL
  */
 
-public class LightAmbiant extends Light {
+public class LightParallel extends Light {
 
     private SmartColor mColor;
+    private Vector3D mDirection;
 
-    public LightAmbiant(@FloatRange(from=0, to=1) float red, @FloatRange(from=0, to=1) float green, @FloatRange(from=0, to=1) float blue) {
-        mColor = new SmartColor(red, green, blue, 1);
+    public LightParallel(@NonNull SmartColor color, @NonNull Vector3D direction) {
+        mColor = color;
+        mDirection = direction;
+        mDirection.normalize();
     }
 
-    public float[] getArray() {
-        return mColor.getArray();
+    public @NonNull SmartColor getColor() {
+        return mColor;
     }
+
+    public @NonNull Vector3D getDirection() {
+        return mDirection;
+    }
+
 }

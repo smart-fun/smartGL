@@ -18,18 +18,29 @@ package fr.arnaudguyon.smartgl.opengl;
 import android.support.annotation.FloatRange;
 
 /**
- * Ambiant Light for OpenGL
+ * Created by aguyon on 18.01.17.
  */
 
-public class LightAmbiant extends Light {
+public class SmartColor {
 
-    private SmartColor mColor;
+    private float[] mColor = new float[4];
 
-    public LightAmbiant(@FloatRange(from=0, to=1) float red, @FloatRange(from=0, to=1) float green, @FloatRange(from=0, to=1) float blue) {
-        mColor = new SmartColor(red, green, blue, 1);
+    public SmartColor(@FloatRange(from=0, to=1) float red, @FloatRange(from=0, to=1) float green, @FloatRange(from=0, to=1) float blue) {
+        mColor[0] = red;
+        mColor[1] = green;
+        mColor[2] = blue;
+        mColor[3] = 1;
+    }
+
+    public SmartColor(@FloatRange(from=0, to=1) float red, @FloatRange(from=0, to=1) float green, @FloatRange(from=0, to=1) float blue, @FloatRange(from=0, to=1) float alpha) {
+        mColor[0] = red;
+        mColor[1] = green;
+        mColor[2] = blue;
+        mColor[3] = alpha;
     }
 
     public float[] getArray() {
-        return mColor.getArray();
+        return mColor;
     }
+
 }

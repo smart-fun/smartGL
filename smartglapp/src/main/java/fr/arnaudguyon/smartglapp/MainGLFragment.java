@@ -48,7 +48,9 @@ public class MainGLFragment extends Fragment {
         final GLViewController controller = new GLViewController();
         mFragmentGLView.setController(controller);
 
-        LightAmbiant lightAmbiant = new LightAmbiant(1, 0.2f, 0.2f);
+        mFragmentGLView.getSmartGLRenderer().setClearColor(0.01f, 0.01f, 0.1f, 1);
+
+        LightAmbiant lightAmbiant = new LightAmbiant(0.2f, 0.2f, 0.2f);
         mFragmentGLView.getSmartGLRenderer().setLightAmbiant(lightAmbiant);
 
         View cruiserButton = view.findViewById(R.id.cruiserButton);

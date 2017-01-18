@@ -1,3 +1,18 @@
+/*
+    Copyright 2017 Arnaud Guyon
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+*/
 package fr.arnaudguyon.smartgl.opengl;
 
 import android.opengl.GLES20;
@@ -51,9 +66,7 @@ public class ShaderTextureAmbiant extends Shader {
     }
 
     @Override
-    public void onPreRender(OpenGLRenderer renderer, RenderObject object) {
-        super.onPreRender(renderer, object);
-
+    public void onPreRender(OpenGLRenderer renderer, RenderObject object, Face3D face) {
         float[] ambiant = renderer.getLightAmbiant();
 //        GLES20.glUniform4f(mLightAmbiantId, 1, 0, 0, 0.3f); // r,v,b,a
         GLES20.glUniform4fv(mLightAmbiantId, 1, ambiant, 0);

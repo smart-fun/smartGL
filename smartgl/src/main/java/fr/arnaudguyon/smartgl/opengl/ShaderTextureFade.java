@@ -63,9 +63,8 @@ public class ShaderTextureFade extends Shader {
 	}
 
 	@Override
-	public void onPreRender(OpenGLRenderer renderer, RenderObject object) {
-		super.onPreRender(renderer, object);
-		
+	public void onPreRender(OpenGLRenderer renderer, RenderObject object, Face3D face) {
+
 		float fadeValue = 1;
 		if (object instanceof IShaderTextureFade) {
 			IShaderTextureFade user = object;

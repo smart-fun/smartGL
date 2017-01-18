@@ -33,6 +33,7 @@ public class MainActivity extends Activity {
         mActivityGLView = (SmartGLView) findViewById(R.id.activityGLView);
         mActivityGLView.setDefaultRenderer(this);
         mActivityGLView.setController(new GLViewController());
+
     }
 
     @Override
