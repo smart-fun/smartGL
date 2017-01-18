@@ -27,6 +27,7 @@ import java.util.HashMap;
 
 import fr.arnaudguyon.smartgl.opengl.ColorList;
 import fr.arnaudguyon.smartgl.opengl.Face3D;
+import fr.arnaudguyon.smartgl.opengl.NormalList;
 import fr.arnaudguyon.smartgl.opengl.Object3D;
 import fr.arnaudguyon.smartgl.opengl.Texture;
 import fr.arnaudguyon.smartgl.opengl.UVList;
@@ -320,6 +321,7 @@ public class WavefrontModel {
     public Object3D toObject3D() {
 
         final boolean hasUV = (mUVs.size() > 0);
+        final boolean hasNormals = (mNormals.size() > 0);
 
         Object3D object3D = new Object3D();
         for(Strip strip : mStrips) {
@@ -340,6 +342,12 @@ public class WavefrontModel {
                 colorList.init(nbIndex);
             }
 
+            NormalList normalList = null;
+            if (hasNormals) {
+                normalList = new NormalList();
+                normalList.init(nbIndex);
+            }
+
             for(IndexInfo indexInfo : strip.mIndexes) {
                 int vertexIndex = indexInfo.mVertexIndex;
                 Vertex vertex = mVertex.get(vertexIndex);
@@ -354,6 +362,13 @@ public class WavefrontModel {
                 } else {
                     throw new RuntimeException("Model must have texture UVs or vertex Colors");
                 }
+
+                if (hasNormals) {
+                    int normalIndex = indexInfo.mNormalIndex;
+                    Normal normal = mNormals.get(normalIndex);
+                    normalList.add(normal.mX, normal.mY, normal.mZ);
+                }
+
             }
             vertexList.finalizeBuffer();
             face3D.setVertexList(vertexList);
@@ -366,6 +381,11 @@ public class WavefrontModel {
             } else {
                 colorList.finalizeBuffer();
                 face3D.setColorList(colorList);
+            }
+
+            if (hasNormals) {
+                normalList.finalizeBuffer();
+                face3D.setNormalList(normalList);
             }
 
             object3D.addFace(face3D);

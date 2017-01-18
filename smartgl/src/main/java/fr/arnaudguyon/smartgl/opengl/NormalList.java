@@ -16,8 +16,16 @@
 package fr.arnaudguyon.smartgl.opengl;
 
 /**
- * Parent class for Lights
+ * List of Normals for a Face3D
  */
 
-public abstract class Light {
+public class NormalList extends AttribList {
+
+    public NormalList() {
+        super(3);
+    }
+
+    protected NormalList(float[] other, int otherElementsPerVector) {
+        super(other, otherElementsPerVector, 3);
+    }
 }
