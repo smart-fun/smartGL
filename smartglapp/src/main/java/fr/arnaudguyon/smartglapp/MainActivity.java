@@ -16,8 +16,13 @@
 package fr.arnaudguyon.smartglapp;
 
 import android.app.Activity;
+import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.ImageView;
 
+import fr.arnaudguyon.smartgl.opengl.OpenGLRenderer;
+import fr.arnaudguyon.smartgl.opengl.SmartGLRenderer;
 import fr.arnaudguyon.smartgl.opengl.SmartGLView;
 
 public class MainActivity extends Activity {
@@ -34,6 +39,13 @@ public class MainActivity extends Activity {
         mActivityGLView.setDefaultRenderer(this);
         mActivityGLView.setController(new GLViewController());
 
+        View screenshotButton = findViewById(R.id.screenshotButton);
+        screenshotButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                takeScreenshot();
+            }
+        });
     }
 
     @Override
@@ -50,5 +62,18 @@ public class MainActivity extends Activity {
         if (mActivityGLView != null) {
             mActivityGLView.onResume();
         }
+    }
+
+    private void takeScreenshot() {
+
+        SmartGLRenderer renderer = mActivityGLView.getSmartGLRenderer();
+        renderer.takeScreenshot(new OpenGLRenderer.OnTakeScreenshot() {
+            @Override
+            public void screenshotTaken(Bitmap bitmap) {
+                ImageView screenshotView = (ImageView) findViewById(R.id.screenshotView);
+                screenshotView.setImageBitmap(bitmap);
+            }
+        });
+
     }
 }

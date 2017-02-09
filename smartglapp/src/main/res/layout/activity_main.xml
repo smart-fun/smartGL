@@ -1,26 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="fr.arnaudguyon.smartglapp.MainActivity"
-    android:background="@color/colorAccent">
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@color/colorAccent"
+              android:orientation="vertical"
+              android:paddingBottom="@dimen/activity_vertical_margin"
+              android:paddingLeft="@dimen/activity_horizontal_margin"
+              android:paddingRight="@dimen/activity_horizontal_margin"
+              android:paddingTop="@dimen/activity_vertical_margin"
+              tools:context="fr.arnaudguyon.smartglapp.MainActivity">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="ACTIVITY GL VIEW" />
+        android:text="ACTIVITY GL VIEW"/>
 
-    <fr.arnaudguyon.smartgl.opengl.SmartGLView
-        android:id="@+id/activityGLView"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="150dp"
-        android:layout_marginBottom="20dp" />
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <fr.arnaudguyon.smartgl.opengl.SmartGLView
+            android:id="@+id/activityGLView"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:layout_weight="50"/>
+
+        <ImageView
+            android:id="@+id/screenshotView"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:layout_weight="50"/>
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/screenshotButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:text="Take Screenshot"/>
 
     <fragment
         android:id="@+id/fragment"
@@ -29,7 +49,7 @@
         android:layout_height="match_parent"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        tools:layout="@layout/glfragment" />
+        tools:layout="@layout/glfragment"/>
 
 
 </LinearLayout>
