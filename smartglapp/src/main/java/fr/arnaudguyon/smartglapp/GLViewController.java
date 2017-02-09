@@ -17,9 +17,12 @@ package fr.arnaudguyon.smartglapp;
 
 import android.content.Context;
 
+import fr.arnaudguyon.smartgl.math.Vector3D;
+import fr.arnaudguyon.smartgl.opengl.LightParallel;
 import fr.arnaudguyon.smartgl.opengl.Object3D;
 import fr.arnaudguyon.smartgl.opengl.RenderPassObject3D;
 import fr.arnaudguyon.smartgl.opengl.RenderPassSprite;
+import fr.arnaudguyon.smartgl.opengl.SmartColor;
 import fr.arnaudguyon.smartgl.opengl.SmartGLRenderer;
 import fr.arnaudguyon.smartgl.opengl.SmartGLView;
 import fr.arnaudguyon.smartgl.opengl.SmartGLViewController;
@@ -45,7 +48,6 @@ public class GLViewController implements SmartGLViewController {
     private Texture mSpaceFrigateTexture;
     private Texture mSpaceCruiserTexture;
 
-
     private RenderPassObject3D mRenderPassObject3D;
     private RenderPassObject3D mRenderPassObject3DColor;
     private RenderPassSprite mRenderPassSprite;
@@ -64,7 +66,7 @@ public class GLViewController implements SmartGLViewController {
 
         // Add RenderPass for Sprites & Object3D
         SmartGLRenderer renderer = smartGLView.getSmartGLRenderer();
-        mRenderPassObject3D = new RenderPassObject3D();
+        mRenderPassObject3D = new RenderPassObject3D(RenderPassObject3D.ShaderType.SHADER_TEXTURE_LIGHTS, true, true);
         mRenderPassObject3DColor = new RenderPassObject3D(RenderPassObject3D.ShaderType.SHADER_COLOR, true, false);
         mRenderPassSprite = new RenderPassSprite();
         renderer.addRenderPass(mRenderPassObject3D);
@@ -72,6 +74,12 @@ public class GLViewController implements SmartGLViewController {
         renderer.addRenderPass(mRenderPassSprite);
 
         renderer.setDoubleSided(false);
+
+        SmartColor lightColor = new SmartColor(1, 1, 1);
+        Vector3D lightDirection = new Vector3D(0, 1, 1);
+        lightDirection.normalize();
+        LightParallel lightParallel = new LightParallel(lightColor, lightDirection);
+        renderer.setLightParallel(lightParallel);
 
         mSpriteTexture = new Texture(context, R.drawable.planet);
         mObjectTexture = new Texture(context, R.drawable.coloredbg);

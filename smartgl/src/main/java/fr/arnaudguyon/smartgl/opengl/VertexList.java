@@ -15,6 +15,9 @@
  */
 package fr.arnaudguyon.smartgl.opengl;
 
+/**
+ * List of Vertex for a Face3D
+ */
 public class VertexList extends AttribList {
 
 	public VertexList() {

@@ -48,14 +48,12 @@ public class ShaderTextureFade extends Shader {
 
 	@Override public boolean useTexture()	{ return true; }
 	@Override public boolean useColor()		{ return false; }
-	
+
 	@Override protected String getVertexAttribName()		{ return "m_Position"; }
 	@Override protected String getUVAttribName()			{ return "m_UV"; }
 	@Override protected String getColorAttribName()			{ return null; }
 	@Override protected String getProjMatrixAttribName()	{ return "m_ProjectionMatrix"; }
 
-	
-	
 	@Override
 	protected void init(int programId) {
 		super.init(programId);
@@ -65,9 +63,8 @@ public class ShaderTextureFade extends Shader {
 	}
 
 	@Override
-	public void onPreRender(RenderObject object) {
-		super.onPreRender(object);
-		
+	public void onPreRender(OpenGLRenderer renderer, RenderObject object, Face3D face) {
+
 		float fadeValue = 1;
 		if (object instanceof IShaderTextureFade) {
 			IShaderTextureFade user = object;

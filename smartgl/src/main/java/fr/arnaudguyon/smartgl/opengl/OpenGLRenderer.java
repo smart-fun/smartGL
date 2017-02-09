@@ -68,6 +68,10 @@ public abstract class OpenGLRenderer implements GLSurfaceView.Renderer {
 
     private Boolean mDoubleSided = true;
 
+	private static final float[] DEFAULT_AMBIANT_LIGHT = {1, 1, 1, 1};	// RVBA
+	private LightAmbiant mLightAmbiant;
+	private LightParallel mLightParallel;
+
     // DEBUG
     private boolean mDebugMode = false;
     private Sprite mColCircleSprite;
@@ -319,7 +323,6 @@ public abstract class OpenGLRenderer implements GLSurfaceView.Renderer {
 					GLES20.glEnableVertexAttribArray(mColorAttribId);
 				}
 			}
-			shader.onPreRender(object);
 
 			// Vertex
 			VertexList vertexList = face.getVertexList();
@@ -357,7 +360,7 @@ public abstract class OpenGLRenderer implements GLSurfaceView.Renderer {
 				colorBuffer.position(0);
 				GLES20.glVertexAttribPointer(mColorAttribId, 4, GLES20.GL_FLOAT, false, 0, colorBuffer);
 			}
-			
+
 			object.onPreRenderFace(this, shader, face);
 			face.onPreRenderFace(this, object, shader);
 
@@ -370,6 +373,7 @@ public abstract class OpenGLRenderer implements GLSurfaceView.Renderer {
 			GLES20.glUniformMatrix4fv(mProjMatrixId, 1, false, mTmpMatrix, 0);
 
 			// Render
+			shader.onPreRender(this, object, face);
 			GLES20.glDrawArrays(GLES20.GL_TRIANGLE_STRIP, 0, vertexList.getNbElements());
 		}
 
@@ -632,6 +636,41 @@ public abstract class OpenGLRenderer implements GLSurfaceView.Renderer {
         }
     }
 	void onResume() {
+	}
+
+	public void setLightAmbiant(LightAmbiant lightAmbiant) {
+		mLightAmbiant = lightAmbiant;
+	}
+
+	float[] getLightAmbiant() {
+		LightAmbiant lightAmbiant = mLightAmbiant;	// avoid multithread issues
+		if (lightAmbiant != null) {
+			return lightAmbiant.getArray();
+		} else {
+			return DEFAULT_AMBIANT_LIGHT;
+		}
+	}
+
+	public void setLightParallel(LightParallel lightParallel) {
+		mLightParallel = lightParallel;
+	}
+
+	float[] getLightDirection() {
+		if (mLightParallel != null) {
+			return mLightParallel.getDirection().getArray();
+		} else {
+			Assert.assertTrue("getLightDirection: No Parallel Light defined", false);
+			return null;
+		}
+	}
+
+	float[] getLightColor() {
+		if (mLightParallel != null) {
+			return mLightParallel.getColor().getArray();
+		} else {
+			Assert.assertTrue("getLightColor: No Parallel Light defined", false);
+			return null;
+		}
 	}
 
 	// TODO: when create surface, unload/reload debug data (if debug mode)

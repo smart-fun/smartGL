@@ -38,7 +38,10 @@ public class RenderPassSprite extends RenderPass {
     @Override
     void sortObjects() {
         Vector<RenderObject> objects = getRenderObjects();
-        Collections.sort(objects, new Comparator<RenderObject>() {  // TODO static Comparator so that it is not created at every frame
+        Collections.sort(objects, SPRITE_COMPARATOR);
+    }
+
+    private static final Comparator<RenderObject> SPRITE_COMPARATOR = new Comparator<RenderObject>() {
             @Override
             public int compare(RenderObject leftO, RenderObject rightO) {
                 if (leftO instanceof Sprite) {
@@ -62,6 +65,6 @@ public class RenderPassSprite extends RenderPass {
                     return 0;
                 }
             }
-        });
-    }
+    };
+
 }
