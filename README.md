@@ -244,9 +244,15 @@ More advanced Tutorials will be put in the Wiki later.
 
 See the sample app for a complete implementation.
 
-You can also download [Slippy Slope](https://play.google.com/store/apps/details?id=fr.smartfun.pingoo) game on Google Play to see what can be done using 2D Sprites (and a little 3D)
+You can also have a look to these apps that use smartGL:
 
-![alt text](extras/slippy_small.png?raw=true "Slippy Slope")
+- [ZenDay](https://play.google.com/store/apps/details?id=com.mobisysteme.zime), a 3D Calendar and Task manager
+- [Slippy Slope](https://play.google.com/store/apps/details?id=fr.smartfun.pingoo), a funny game which uses a lot 2D Sprites
+- [Bulldozer Rampage](https://play.google.com/store/apps/details?id=org.lunapark.dev.bullramp), a race game which uses 3D objects
+- [Time Shift](https://www.youtube.com/watch?v=A4hfyvfj-d8) a demo that combines 2D and 3D effects
+
+
+![alt text](extras/releases.png?raw=true "projects using smartGL")
 
 ## Installation with gradle
 
