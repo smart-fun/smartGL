@@ -19,16 +19,16 @@ package fr.arnaudguyon.smartgl.opengl;
  * @author Arnaud Guyon
  * 
  *         Defines a face for an Object3D. A Face3D is composed of a Texture, a
- *         VertexList and a UVList
+ *         VertexList, a UVList and a NormalList
  * 
  */
-
 public class Face3D {
 
 	private Texture mTexture;
 	private VertexList mVertexList;
 	private UVList mUVList;
 	private ColorList mColorList;
+	private NormalList mNormalList;
 	private boolean mVisible = true;
 
 	public Face3D() {
@@ -59,6 +59,14 @@ public class Face3D {
 
 	final public ColorList getColorList() {
 		return mColorList;
+	}
+
+	final public void setNormalList(NormalList normalList) {
+		mNormalList = normalList;
+	}
+
+	final public NormalList getNormalList() {
+		return mNormalList;
 	}
 
 	final public void setTexture(Texture texture) {
@@ -97,6 +105,11 @@ public class Face3D {
 		if (mColorList != null) {
 			mColorList.destroyFloatBuffer();
 			mColorList = null;
+		}
+
+		if (mNormalList != null) {
+			mNormalList.destroyFloatBuffer();
+			mNormalList = null;
 		}
 	}
 	

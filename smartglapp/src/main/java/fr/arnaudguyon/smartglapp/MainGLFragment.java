@@ -23,6 +23,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import fr.arnaudguyon.smartgl.opengl.LightAmbiant;
 import fr.arnaudguyon.smartgl.opengl.SmartGLView;
 
 /**
@@ -46,6 +47,11 @@ public class MainGLFragment extends Fragment {
         mFragmentGLView.setDefaultRenderer(context);
         final GLViewController controller = new GLViewController();
         mFragmentGLView.setController(controller);
+
+        mFragmentGLView.getSmartGLRenderer().setClearColor(0.01f, 0.01f, 0.1f, 1);
+
+        LightAmbiant lightAmbiant = new LightAmbiant(0.2f, 0.2f, 0.2f);
+        mFragmentGLView.getSmartGLRenderer().setLightAmbiant(lightAmbiant);
 
         View cruiserButton = view.findViewById(R.id.cruiserButton);
         cruiserButton.setOnClickListener(new View.OnClickListener() {
