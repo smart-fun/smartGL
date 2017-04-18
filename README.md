@@ -240,9 +240,13 @@ public class MainActivity extends AppCompatActivity implements SmartGLViewContro
 
 ![alt text](extras/2d3d_screenshot.png?raw=true "Sprite & Object 3D")
 
-More advanced Tutorials will be put in the Wiki later.
+##Advanced use of SmartGL##
 
-See the sample app for a complete implementation.
+Read the [**ADVANCED DOCUMENTATION ON WIKI**](https://github.com/smart-fun/smartGL/wiki)
+
+##Samples##
+
+See the **sample app** for a complete implementation (download or clone the repository)
 
 You can also have a look to these apps that use smartGL:
 
