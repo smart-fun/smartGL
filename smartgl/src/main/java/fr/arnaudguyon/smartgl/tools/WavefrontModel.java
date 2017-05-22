@@ -167,8 +167,7 @@ public class WavefrontModel {
             int lineNumber = 0;
             while ((line = bufferedReader.readLine()) != null) {
                 ++lineNumber;
-                line = line.replace("  ", " ");
-                String[] elements = line.split(" ");
+                String[] elements = line.split("\\s+");
                 switch (elements[0]) {
                     case "v":   // VERTEX
                         if (elements.length > 3) {
