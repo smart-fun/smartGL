@@ -1,4 +1,4 @@
-#SmartGL for Android#
+# SmartGL for Android #
 
 **SmartGL** is a Graphic Engine for creating Android Games and Apps. It is based on **OpenGL** and handles **2D Sprites** and **3D Textured Objects**.
 
@@ -6,7 +6,7 @@ SmartGL is used by several games and apps.
 
 ![alt text](extras/smartgl_screenshot.png?raw=true "Screenshot example")
 
-##How to use##
+## How to use ##
 
 The scene is displayed inside a **SmartGLView**.
 
@@ -77,7 +77,7 @@ public class MainActivity extends AppCompatActivity implements SmartGLViewContro
 }
 ```
 
-###LifeCycle###
+### LifeCycle ###
 
 It is really important to inform the SmartGLView when the Activity or Fragment is paused or resumed. **If you miss this step the scene will not be initialized or restored correctly**.
 
@@ -102,7 +102,7 @@ public class MainActivity extends AppCompatActivity implements SmartGLViewContro
 }
 ```
 
-###Playing with the Sprites###
+### Playing with the Sprites ###
 
 The draw pipeline includes Render passes. For example you can have several 3D objects in the background pass, and several Sprites in the forground pass.
 
@@ -143,7 +143,7 @@ public class MainActivity extends AppCompatActivity implements SmartGLViewContro
 
 ![alt text](extras/sprite_screenshot.png?raw=true "Sprite on screen")
 
-###Add movement###
+### Add movement ###
 
 Let's add some basic moves.
 
@@ -174,7 +174,7 @@ public class MainActivity extends AppCompatActivity implements SmartGLViewContro
 
 Your Sprite is now moving and rotating on the screen!
 
-###Playing with 3D Objects###
+### Playing with 3D Objects ###
 
 Now let's add a moving 3D Object! There is a **WavefrontModel** class that can load a Wavefront model from an .obj file.
 
@@ -240,11 +240,11 @@ public class MainActivity extends AppCompatActivity implements SmartGLViewContro
 
 ![alt text](extras/2d3d_screenshot.png?raw=true "Sprite & Object 3D")
 
-##Advanced use of SmartGL##
+## Advanced use of SmartGL ##
 
 Read the [**ADVANCED DOCUMENTATION ON WIKI**](https://github.com/smart-fun/smartGL/wiki)
 
-##Samples##
+## Samples ##
 
 See the **sample app** for a complete implementation (download or clone the repository)
 
@@ -258,7 +258,7 @@ You can also have a look to these apps that use smartGL:
 
 ![alt text](extras/releases.png?raw=true "projects using smartGL")
 
-## Installation with gradle
+## Installation with gradle ##
 
 Add the following maven{} line to your **PROJECT** build.gradle file
 
@@ -279,7 +279,7 @@ dependencies {
 }
 ```
 
-##License##
+## License ##
 
 Copyright 2016 Arnaud Guyon
 
