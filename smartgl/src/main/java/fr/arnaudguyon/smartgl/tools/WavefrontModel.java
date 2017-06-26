@@ -199,7 +199,7 @@ public class WavefrontModel {
                             Float u = fromString(elements[1]);
                             Float v = fromString(elements[2]);
                             if ((u != null) && (v != null)) {
-                                UV uv = new UV(u, v);
+                                UV uv = new UV(u, 1 - v);   // uv are upside down, use (u, 1-v)
                                 mUVs.add(uv);
                                 break;
                             }
