@@ -86,10 +86,20 @@ public class SmartGLView extends OpenGLView {
 	@SuppressLint("ClickableViewAccessibility")
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
-		if (mTouchHelper != null) {
-			mTouchHelper.onTouchEvent(this, event, false);
-		}
-		return true;
+        if (isClickable()) {
+            if (mTouchHelper == null) {
+                mTouchHelper = new TouchHelper();
+            }
+            if (mTouchHelper != null) {
+                mTouchHelper.onTouchEvent(this, event, false);
+            }
+            return true;
+        } else {
+            if (mTouchHelper != null) {
+                mTouchHelper = null;
+            }
+            return false;
+        }
 	}
 
     /**
@@ -193,7 +203,6 @@ public class SmartGLView extends OpenGLView {
 	@Override
     protected void acquireResources() {
 		super.acquireResources();
-		activateTouch(true);
         if (mListener != null) {
             mListener.onPrepareView(this);
         }
@@ -207,18 +216,6 @@ public class SmartGLView extends OpenGLView {
             mListener.onReleaseView(this);
         }
 	}
-
-    /**
-     * Enable or Disable the Touch events on the view
-     * @param activate true to enable the Touch, false to disable the Touch
-     */
-	public void activateTouch(boolean activate) {
-        if (activate) {
-            mTouchHelper = new TouchHelper();
-        } else {
-            mTouchHelper = null;
-        }
-    }
 
     @Override
     protected void onViewResized(int width, int height) {
