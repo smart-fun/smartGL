@@ -50,7 +50,16 @@ If the View is resized for any reason (rotation of the device for example), **on
 
 At every OpenGL frame, **onTick(...)** is called.
 
-Finally, every touch interaction calls **onTouchEvent(...)**
+Finally, every touch interaction calls **onTouchEvent(...)**. Note that you have to enable the touch in the view, by code or in the XML:
+
+```xml
+<fr.arnaudguyon.smartgl.opengl.SmartGLView
+    ...
+    android:clickable="true"/>
+```
+
+Here are the callbacks:
+
 
 ```java
 public class MainActivity extends AppCompatActivity implements SmartGLViewController {
