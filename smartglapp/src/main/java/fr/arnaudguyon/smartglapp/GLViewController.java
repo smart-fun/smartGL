@@ -16,6 +16,7 @@
 package fr.arnaudguyon.smartglapp;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 
 import fr.arnaudguyon.smartgl.math.Vector3D;
 import fr.arnaudguyon.smartgl.opengl.LightParallel;
@@ -51,6 +52,14 @@ public class GLViewController implements SmartGLViewController {
     private RenderPassObject3D mRenderPassObject3D;
     private RenderPassObject3D mRenderPassObject3DColor;
     private RenderPassSprite mRenderPassSprite;
+
+    private Object3D mBus;
+    private Object3D mCube;
+    private Object3D mFrigate;
+    private Object3D mCruiser;
+
+    private Object3D mNextObject = null;
+    private Object3D mNextObjectColor = null;
 
     public GLViewController() {
         mRandomRotationSpeed = (float) ((Math.random() * 50) + 100);
@@ -94,10 +103,12 @@ public class GLViewController implements SmartGLViewController {
         mSprite.setDisplayPriority(20);
         mRenderPassSprite.addSprite(mSprite);
 
-        putSpaceFrigate(context);
-//        putSpaceCruiser(context);
-//        putColoredCube(context);
-//        putBus(context);
+        mBus = loadBus(context);
+        mCube = loadCube(context);
+        mFrigate = loadFrigate(context);
+        mCruiser = loadCruiser(context);
+
+        switchToFrigate();
     }
 
     @Override
@@ -124,6 +135,21 @@ public class GLViewController implements SmartGLViewController {
 
     @Override
     public void onTick(SmartGLView smartGLView) {
+
+        Object3D next = mNextObject;
+        Object3D nextColor = mNextObjectColor;
+        if (next != null) {
+            dropAllObject3D();
+            mRenderPassObject3D.addObject(mNextObject);
+            mObject3D = mNextObject;
+            mNextObject = null;
+        } else if (nextColor != null) {
+            dropAllObject3D();
+            mRenderPassObject3DColor.addObject(mNextObjectColor);
+            mObject3D = mNextObjectColor;
+            mNextObjectColor = null;
+        }
+
         SmartGLRenderer renderer = smartGLView.getSmartGLRenderer();
         float frameDuration = renderer.getFrameDuration();
         if (mSprite != null) {
@@ -188,39 +214,50 @@ public class GLViewController implements SmartGLViewController {
         mRenderPassObject3DColor.clearObjects();
     }
 
-    void putSpaceCruiser(Context context) {
-        dropAllObject3D();
+    private Object3D loadCruiser(@NonNull Context context) {
         WavefrontModel model = new WavefrontModel.Builder(context, R.raw.space_cruiser_obj)
                 .addTexture("", mSpaceCruiserTexture)
                 .create();
-        mObject3D = model.toObject3D();
-        mObject3D.setScale(0.2f, 0.2f, 0.2f);
-        mObject3D.setPos(0, 0, -5);
-        mRenderPassObject3D.addObject(mObject3D);
+        Object3D object3D = model.toObject3D();
+        object3D.setScale(0.2f, 0.2f, 0.2f);
+        object3D.setPos(0, 0, -5);
+        return object3D;
     }
 
-    void putSpaceFrigate(Context context) {
-        dropAllObject3D();
+    void switchToCruiser() {
+        mNextObjectColor = null;
+        mNextObject = mCruiser;
+    }
+
+    private Object3D loadFrigate(@NonNull Context context) {
         WavefrontModel model = new WavefrontModel.Builder(context, R.raw.space_frigate_obj)
                 .addTexture("", mSpaceFrigateTexture)
                 .create();
-        mObject3D = model.toObject3D();
-        mObject3D.setScale(0.2f, 0.2f, 0.2f);
-        mObject3D.setPos(0, 0, -7);
-        mRenderPassObject3D.addObject(mObject3D);
+        Object3D object3D = model.toObject3D();
+        object3D.setScale(0.2f, 0.2f, 0.2f);
+        object3D.setPos(0, 0, -7);
+        return object3D;
     }
 
-    void putColoredCube(Context context) {
-        dropAllObject3D();
+    void switchToFrigate() {
+        mNextObjectColor = null;
+        mNextObject = mFrigate;
+    }
+
+    private Object3D loadCube(@NonNull Context context) {
         WavefrontModel modelColored = new WavefrontModel.Builder(context, R.raw.cube_color_obj)
                 .create();
-        mObject3D = modelColored.toObject3D();
-        mObject3D.setPos(0, 0, -4);
-        mRenderPassObject3DColor.addObject(mObject3D);
+        Object3D object3D = modelColored.toObject3D();
+        object3D.setPos(0, 0, -4);
+        return object3D;
     }
 
-    void putBus(Context context) {
-        dropAllObject3D();
+    void switchToCube() {
+        mNextObject = null;
+        mNextObjectColor = mCube;
+    }
+
+    private Object3D loadBus(@NonNull Context context) {
         WavefrontModel model = new WavefrontModel.Builder(context, R.raw.bus_obj)
                 .addTexture("Mat_1", mObjectTexture)
                 .addTexture("Mat_2", mSpriteTexture)
@@ -229,10 +266,15 @@ public class GLViewController implements SmartGLViewController {
                 .addTexture("Mat_5", mObjectTexture)
                 .addTexture("Mat_6", mSpriteTexture)
                 .create();
-        mObject3D = model.toObject3D();
-        mObject3D.setScale(0.1f, 0.1f, 0.1f);
-        mObject3D.setPos(0, 0, -50);
-        mRenderPassObject3D.addObject(mObject3D);
+        Object3D object3D = model.toObject3D();
+        object3D.setScale(0.1f, 0.1f, 0.1f);
+        object3D.setPos(0, 0, -50);
+        return object3D;
+    }
+
+    void switchToBus() {
+        mNextObjectColor = null;
+        mNextObject = mBus;
     }
 
 }

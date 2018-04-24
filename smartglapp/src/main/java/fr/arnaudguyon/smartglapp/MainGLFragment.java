@@ -57,28 +57,28 @@ public class MainGLFragment extends Fragment {
         cruiserButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                controller.putSpaceCruiser(context);
+                controller.switchToCruiser();
             }
         });
         View fregateButton = view.findViewById(R.id.fregateButton);
         fregateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                controller.putSpaceFrigate(context);
+                controller.switchToFrigate();
             }
         });
         View busButton = view.findViewById(R.id.busButton);
         busButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                controller.putBus(context);
+                controller.switchToBus();
             }
         });
         View cubeButton = view.findViewById(R.id.cubeButton);
         cubeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                controller.putColoredCube(context);
+                controller.switchToCube();
             }
         });
 
