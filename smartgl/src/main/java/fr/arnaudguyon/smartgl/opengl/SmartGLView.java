@@ -33,21 +33,22 @@ import fr.arnaudguyon.smartgl.touch.TouchHelperEvent;
  */
 
 public class SmartGLView extends OpenGLView {
-	
-	private TouchHelper mTouchHelper;
-	private Sprite mInputSprite;
+
+    private TouchHelper mTouchHelper;
+    private Sprite mInputSprite;
     private SmartGLViewController mListener;
 
-	public SmartGLView(Context context) {
-		super(context);
-	}
+    public SmartGLView(Context context) {
+        super(context);
+    }
 
-	public SmartGLView(Context context, AttributeSet attrs) {
-		super(context, attrs);
-	}
+    public SmartGLView(Context context, AttributeSet attrs) {
+        super(context, attrs);
+    }
 
     /**
      * set the SmartGLRenderer as scene renderer
+     *
      * @param context
      */
     public void setDefaultRenderer(@NonNull Context context) {
@@ -57,18 +58,20 @@ public class SmartGLView extends OpenGLView {
 
     /**
      * returns the current SmartGLRenderer
+     *
      * @return the current SmartGLRenderer or null if none
      */
-	public SmartGLRenderer getSmartGLRenderer() {
+    public SmartGLRenderer getSmartGLRenderer() {
         OpenGLRenderer renderer = getOpenGLRenderer();
         if (renderer instanceof SmartGLRenderer) {
             return (SmartGLRenderer) renderer;
         }
-		return null;
-	}
+        return null;
+    }
 
     /**
      * set the SmartGLViewController
+     *
      * @param controller
      */
     public void setController(SmartGLViewController controller) {
@@ -77,145 +80,149 @@ public class SmartGLView extends OpenGLView {
 
     /**
      * gets the SmartGLViewController
+     *
      * @return
      */
     public SmartGLViewController getController() {
         return mListener;
     }
 
-	@SuppressLint("ClickableViewAccessibility")
-	@Override
-	public boolean onTouchEvent(MotionEvent event) {
+    @SuppressLint("ClickableViewAccessibility")
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
         if (isClickable()) {
             if (mTouchHelper == null) {
                 mTouchHelper = new TouchHelper();
             }
-            if (mTouchHelper != null) {
-                mTouchHelper.onTouchEvent(this, event, false);
-            }
+            mTouchHelper.onTouchEvent(this, event, false);
             return true;
         } else {
-            if (mTouchHelper != null) {
-                mTouchHelper = null;
-            }
+            mTouchHelper = null;
             return false;
         }
-	}
+    }
 
     /**
      * to call if there is an Android view on top of the SmartGLView and there is a need that the SmartGL view handles the touch.
      * It propagates the touch to the SmartGLView.
+     *
      * @param fromView an Android View
-     * @param event the touch event received in this view
+     * @param event    the touch event received in this view
      */
     public void onTouchEventFromOtherView(View fromView, MotionEvent event) {
-        if (mTouchHelper != null) {
+        if (isClickable()) {
+            if (mTouchHelper == null) {
+                mTouchHelper = new TouchHelper();
+            }
             mTouchHelper.onTouchEvent(fromView, event, true);
+        } else {
+            mTouchHelper = null;
         }
     }
 
     /**
      * called at every frame of OpenGL. Handles the Touch Events
+     *
      * @param renderer
      */
-	@Override
-	public void onPreRender(OpenGLRenderer renderer) {
-		super.onPreRender(renderer);
+    @Override
+    public void onPreRender(OpenGLRenderer renderer) {
+        super.onPreRender(renderer);
 
         if (mListener != null) {
             mListener.onTick(this);
         }
 
-		// Handle Touch Events: skip several moves in a row and send OnTouchEvent (on OpenGLThread)
-		if (mTouchHelper != null) {
-			TouchHelperEvent event = mTouchHelper.getNextEvent();
-			if (event != null) {
-				Vector<TouchHelperEvent> touchEvents = new Vector<TouchHelperEvent>();
-				while(event != null) {
-					//Log.i(TAG, "Touch " + event.getX(0) + " ; " + event.getY(0));
-					int tabSize = touchEvents.size();
-					TouchHelperEvent.TouchEventType newType = event.getType();
-					if ((tabSize > 0) && (newType == TouchHelperEvent.TouchEventType.SINGLEMOVE || newType == TouchHelperEvent.TouchEventType.MULTIMOVE) && (touchEvents.get(tabSize - 1).getType() == newType)) {
-						touchEvents.remove(tabSize - 1);
-					}
-					touchEvents.add(event);
-					event = mTouchHelper.getNextEvent();
-				}
-				
-				float frameDuration = renderer.getFrameDuration();
-				
-				for (int eventIndex = 0; eventIndex < touchEvents.size(); ++eventIndex) {
-					event = touchEvents.get(eventIndex);
-					
-					boolean handledBySprites = touchEventOnSprites(event, frameDuration);
-					if (handledBySprites) {
-						continue;
-					}
-					
-					onTouchEvent(event);
-				}
-				
-			}
-		}
-	}
-	
-	private boolean touchEventOnSprites(TouchHelperEvent event, float frameDuration) {
+        // Handle Touch Events: skip several moves in a row and send OnTouchEvent (on OpenGLThread)
+        if (mTouchHelper != null) {
+            TouchHelperEvent event = mTouchHelper.getNextEvent();
+            if (event != null) {
+                Vector<TouchHelperEvent> touchEvents = new Vector<TouchHelperEvent>();
+                while (event != null) {
+                    //Log.i(TAG, "Touch " + event.getX(0) + " ; " + event.getY(0));
+                    int tabSize = touchEvents.size();
+                    TouchHelperEvent.TouchEventType newType = event.getType();
+                    if ((tabSize > 0) && (newType == TouchHelperEvent.TouchEventType.SINGLEMOVE || newType == TouchHelperEvent.TouchEventType.MULTIMOVE) && (touchEvents.get(tabSize - 1).getType() == newType)) {
+                        touchEvents.remove(tabSize - 1);
+                    }
+                    touchEvents.add(event);
+                    event = mTouchHelper.getNextEvent();
+                }
 
-		boolean spriteDisappeared = ((mInputSprite != null) && (mInputSprite.isHidden() || !mInputSprite.handlesInput()));
+                float frameDuration = renderer.getFrameDuration();
 
-		if (spriteDisappeared || (event.getType() == TouchHelperEvent.TouchEventType.SINGLETOUCH)) {
-			final float x = event.getX(0);
-			final float y = event.getY(0);
+                for (int eventIndex = 0; eventIndex < touchEvents.size(); ++eventIndex) {
+                    event = touchEvents.get(eventIndex);
 
-			OpenGLRenderer renderer = getOpenGLRenderer();
-			
-			Vector<Sprite> hudSprites = renderer.getToucheableSprites();
-			final int touchSize = hudSprites.size();
-			for (int touchIt = touchSize - 1; touchIt >= 0; --touchIt) {
-				RenderObject renderObject = hudSprites.get(touchIt);
-				Sprite sprite = (Sprite) renderObject;
-				if (sprite != null && sprite.handlesInput() && sprite.isVisible() && sprite.touchedBy(x, y)) {
-					if (sprite.onTouch(event, frameDuration, mInputSprite)) {
-						mInputSprite = sprite;
-						return true;
-					}
-				}
-			}
-			mInputSprite = null;
-			return false;
-		} else if (mInputSprite == null) {
-			return false;
-		} else {
-			mInputSprite.onTouch(event, frameDuration, mInputSprite);
-			if (event.getType() == TouchHelperEvent.TouchEventType.SINGLEUNTOUCH) {
-				mInputSprite = null;
-			}
-			return true;
-		}
-	}
-	
-	protected void onTouchEvent(TouchHelperEvent event) {
+                    boolean handledBySprites = touchEventOnSprites(event, frameDuration);
+                    if (handledBySprites) {
+                        continue;
+                    }
+
+                    onTouchEvent(event);
+                }
+
+            }
+        }
+    }
+
+    private boolean touchEventOnSprites(TouchHelperEvent event, float frameDuration) {
+
+        boolean spriteDisappeared = ((mInputSprite != null) && (mInputSprite.isHidden() || !mInputSprite.handlesInput()));
+
+        if (spriteDisappeared || (event.getType() == TouchHelperEvent.TouchEventType.SINGLETOUCH)) {
+            final float x = event.getX(0);
+            final float y = event.getY(0);
+
+            OpenGLRenderer renderer = getOpenGLRenderer();
+
+            Vector<Sprite> hudSprites = renderer.getToucheableSprites();
+            final int touchSize = hudSprites.size();
+            for (int touchIt = touchSize - 1; touchIt >= 0; --touchIt) {
+                RenderObject renderObject = hudSprites.get(touchIt);
+                Sprite sprite = (Sprite) renderObject;
+                if (sprite != null && sprite.handlesInput() && sprite.isVisible() && sprite.touchedBy(x, y)) {
+                    if (sprite.onTouch(event, frameDuration, mInputSprite)) {
+                        mInputSprite = sprite;
+                        return true;
+                    }
+                }
+            }
+            mInputSprite = null;
+            return false;
+        } else if (mInputSprite == null) {
+            return false;
+        } else {
+            mInputSprite.onTouch(event, frameDuration, mInputSprite);
+            if (event.getType() == TouchHelperEvent.TouchEventType.SINGLEUNTOUCH) {
+                mInputSprite = null;
+            }
+            return true;
+        }
+    }
+
+    protected void onTouchEvent(TouchHelperEvent event) {
         if (mListener != null) {
             mListener.onTouchEvent(this, event);
         }
-	}
+    }
 
-	@Override
+    @Override
     protected void acquireResources() {
-		super.acquireResources();
+        super.acquireResources();
         if (mListener != null) {
             mListener.onPrepareView(this);
         }
     }
 
-	@Override
-	protected void releaseResources() {
-		super.releaseResources();
-		mTouchHelper = null;
+    @Override
+    protected void releaseResources() {
+        super.releaseResources();
+        mTouchHelper = null;
         if (mListener != null) {
             mListener.onReleaseView(this);
         }
-	}
+    }
 
     @Override
     protected void onViewResized(int width, int height) {
