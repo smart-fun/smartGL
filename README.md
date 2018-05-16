@@ -115,7 +115,7 @@ public class MainActivity extends AppCompatActivity implements SmartGLViewContro
 
 The draw pipeline includes Render passes. For example you can have several 3D objects in the background pass, and several Sprites in the forground pass.
 
-Let's start with a simple **Sprite** using a **Texture** (picture) loaded from the Android drawables. It is highly recommended to share the same texture between several Sprites or Objects 3D when possible: the textures are loaded into the GPU memory and it is often not that big.
+Let's start with a simple **Sprite** using a **Texture** (picture) loaded from the Android drawables. It is highly recommended to share the same texture between several Sprites or Objects 3D when possible: the textures are loaded into the GPU memory which size is limited.
 
 ```java
 public class MainActivity extends AppCompatActivity implements SmartGLViewController {
@@ -142,6 +142,7 @@ public class MainActivity extends AppCompatActivity implements SmartGLViewContro
     public void onReleaseView(SmartGLView smartGLView) {
         if (mSpriteTexture != null) {
             mSpriteTexture.release();
+            mSpriteTexture = null;
         }
     }
 
@@ -238,6 +239,7 @@ public class MainActivity extends AppCompatActivity implements SmartGLViewContro
         public void onReleaseView(SmartGLView smartGLView) {
             if (mShipTexture != null) {
                 mShipTexture.release();
+                mShipTexture = null;
             }
         }
     }

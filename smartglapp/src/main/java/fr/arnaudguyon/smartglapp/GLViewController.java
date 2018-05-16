@@ -115,15 +115,19 @@ public class GLViewController implements SmartGLViewController {
     public void onReleaseView(SmartGLView smartGLView) {
         if (mSpriteTexture != null) {
             mSpriteTexture.release();
+            mSpriteTexture = null;
         }
         if (mObjectTexture != null) {
             mObjectTexture.release();
+            mObjectTexture = null;
         }
         if (mSpaceFrigateTexture != null) {
             mSpaceFrigateTexture.release();
+            mSpaceFrigateTexture = null;
         }
         if (mSpaceCruiserTexture != null) {
             mSpaceCruiserTexture.release();
+            mSpaceCruiserTexture = null;
         }
     }
 
