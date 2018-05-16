@@ -129,6 +129,7 @@ public class MainActivity extends AppCompatActivity implements SmartGLViewContro
         RenderPassSprite renderPassSprite = new RenderPassSprite();
         renderer.addRenderPass(renderPassSprite);  // add it only once for all Sprites
 
+        // the drawable must be a picture (jpg or png), not a vector (xml)
         mSpriteTexture = new Texture(context, R.drawable.planet);
 
         mSprite = new Sprite(120, 120);	// 120 x 120 pixels
@@ -211,6 +212,7 @@ public class MainActivity extends AppCompatActivity implements SmartGLViewContro
         RenderPassObject3D renderPassObject3D = new RenderPassObject3D();
         renderer.addRenderPass(renderPassObject3D);  // add it only once for all 3D Objects
         
+        // the drawable must be a picture (jpg or png), not a vector (xml)
         mShipTexture = new Texture(context, R.drawable.ship_picture);
 
         WavefrontModel model = new WavefrontModel.Builder(context, R.raw.spaceship_obj)
