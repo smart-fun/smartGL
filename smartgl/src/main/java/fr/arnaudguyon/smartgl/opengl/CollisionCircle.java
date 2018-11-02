@@ -15,7 +15,7 @@
  */
 package fr.arnaudguyon.smartgl.opengl;
 
-import junit.framework.Assert;
+import fr.arnaudguyon.smartgl.tools.Assert;
 
 /**
  * Created by Arnaud Guyon on 07/05/2015.
