@@ -17,9 +17,9 @@ package fr.arnaudguyon.smartgl.opengl;
 
 import android.opengl.GLES20;
 
-import junit.framework.Assert;
-
 import java.nio.FloatBuffer;
+
+import fr.arnaudguyon.smartgl.tools.Assert;
 
 /**
  * Created by aguyon on 18.01.17.

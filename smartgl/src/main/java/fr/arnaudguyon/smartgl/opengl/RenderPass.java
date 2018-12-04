@@ -17,8 +17,9 @@ package fr.arnaudguyon.smartgl.opengl;
 
 import java.util.Vector;
 
-import junit.framework.Assert;
 import android.opengl.GLES20;
+
+import fr.arnaudguyon.smartgl.tools.Assert;
 
 public class RenderPass {
 	private final static int NOPROGRAM = 0;

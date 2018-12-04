@@ -33,10 +33,9 @@ import android.os.Handler;
 import android.os.SystemClock;
 import android.util.SparseArray;
 
-import junit.framework.Assert;
-
 import fr.arnaudguyon.smartgl.R;
 import fr.arnaudguyon.smartgl.math.Vector2D;
+import fr.arnaudguyon.smartgl.tools.Assert;
 
 /**
  * Base class for the Renderer. Handles the list of the RenderObject to display, the camera.

@@ -17,7 +17,7 @@ package fr.arnaudguyon.smartgl.opengl;
 
 import android.util.Log;
 
-import junit.framework.Assert;
+import fr.arnaudguyon.smartgl.tools.Assert;
 
 /**
  * Created by Arnaud Guyon on 09/05/2015.

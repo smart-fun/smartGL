@@ -15,9 +15,10 @@
  */
 package fr.arnaudguyon.smartgl.opengl;
 
-import junit.framework.Assert;
 import android.opengl.GLES20;
 import android.util.Log;
+
+import fr.arnaudguyon.smartgl.tools.Assert;
 
 abstract public class Shader {
 	
