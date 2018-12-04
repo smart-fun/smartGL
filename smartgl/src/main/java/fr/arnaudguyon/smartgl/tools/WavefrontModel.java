@@ -16,6 +16,7 @@
 package fr.arnaudguyon.smartgl.tools;
 
 import android.content.Context;
+import android.support.annotation.FloatRange;
 import android.util.Log;
 
 import java.io.BufferedReader;
@@ -43,10 +44,11 @@ public class WavefrontModel {
     private static final String TAG = "WavefrontModel";
 
     public static class Builder {
-        Context mContext;
-        int mRawResourceId;
-        boolean mOptimizeModel = true;
-        HashMap<String, Texture> mTextures = new HashMap<>();
+        private Context mContext;
+        private int mRawResourceId;
+        private boolean mOptimizeModel = true;
+        private HashMap<String, Texture> mTextures = new HashMap<>();
+        private float[] mColor = {1,1,1};
 
         public Builder(Context context, int rawFileResourceId) {
             mContext = context;
@@ -60,6 +62,12 @@ public class WavefrontModel {
             mTextures.put(textureName, texture);
             return this;
         }
+        public Builder setColor(@FloatRange(from=0, to=1) float red, @FloatRange(from=0, to=1) float green, @FloatRange(from=0, to=1) float blue) {
+            mColor[0] = red;
+            mColor[1] = green;
+            mColor[2] = blue;
+            return this;
+        }
 
         public WavefrontModel create() {
             WavefrontModel wavefront = new WavefrontModel();
@@ -68,6 +76,7 @@ public class WavefrontModel {
                 wavefront.mergeStrips();
             }
             wavefront.mTextures = mTextures;
+            wavefront.mColor = mColor;
             return wavefront;
         }
 
@@ -153,6 +162,7 @@ public class WavefrontModel {
     private ArrayList<Normal> mNormals = new ArrayList<>();
     private ArrayList<Strip> mStrips = new ArrayList<>();
     private HashMap<String, Texture> mTextures = new HashMap<>();
+    private float[] mColor;
 
     private WavefrontModel() {
     }
@@ -359,7 +369,9 @@ public class WavefrontModel {
                 } else if (vertex.mHasColors) {
                     colorList.add(vertex.mR, vertex.mG, vertex.mB, 1);  // TODO: find a way to change the alpha channel?
                 } else {
-                    throw new RuntimeException("Model must have texture UVs or vertex Colors");
+                    vertex.setColors(mColor[0], mColor[1], mColor[2]);
+                    colorList.add(vertex.mR, vertex.mG, vertex.mB, 1);
+//                    throw new RuntimeException("Model must have texture UVs or vertex Colors");
                 }
 
                 if (hasNormals) {

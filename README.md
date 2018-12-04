@@ -253,6 +253,23 @@ public class MainActivity extends AppCompatActivity implements SmartGLViewContro
 
 ![alt text](extras/2d3d_screenshot.png?raw=true "Sprite & Object 3D")
 
+Note that if your Model does not have a texture but colors on each vertex, you'll have to use a specific "color" shader instead of the default one:
+
+```java
+
+	new RenderPassObject3D(RenderPassObject3D.ShaderType.SHADER_COLOR, true, true);
+
+
+```
+
+Also if there are no textures and no colors on vertex, you can specify a default color in the WavefrontModel.Builder using:
+
+```java
+
+	builder.setColor(0.5f, 0.3, 0.8f);	// RGB
+
+```
+
 ## Advanced use of SmartGL ##
 
 Read the [**ADVANCED DOCUMENTATION ON WIKI**](https://github.com/smart-fun/smartGL/wiki)
