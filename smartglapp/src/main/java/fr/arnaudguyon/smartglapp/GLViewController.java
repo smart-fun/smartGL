@@ -84,8 +84,8 @@ public class GLViewController implements SmartGLViewController {
 
         renderer.setDoubleSided(false);
 
-        SmartColor lightColor = new SmartColor(1, 1, 1);
-        Vector3D lightDirection = new Vector3D(0, 1, 1);
+        SmartColor lightColor = new SmartColor(2, 2, 2);
+        Vector3D lightDirection = new Vector3D(1, -1, -1);
         lightDirection.normalize();
         LightParallel lightParallel = new LightParallel(lightColor, lightDirection);
         renderer.setLightParallel(lightParallel);

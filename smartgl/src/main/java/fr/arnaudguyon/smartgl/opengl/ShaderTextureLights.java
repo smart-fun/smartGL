@@ -29,7 +29,7 @@ public class ShaderTextureLights extends Shader {
 
     private final static String VERTEX_SHADER =
             "uniform mat4 m_ProjectionMatrix;" +
-            "uniform mat4 mModelMatrix;" +
+                    "uniform mat4 mModelMatrix;" +
                     "uniform vec3 mLightDirection;" +
                     "uniform vec4 mLightColor;" +
                     "uniform vec4 mAmbiantColor;" +
@@ -42,9 +42,10 @@ public class ShaderTextureLights extends Shader {
                     "  gl_Position = m_ProjectionMatrix * m_Position;" +
                     "  vTextureCoord = m_UV;" +
                     "  vec3 modelViewNormal = vec3(mModelMatrix * vec4(mNormals, 0.0));" +
-                    "  float diffuse = max(dot(modelViewNormal, mLightDirection), 0.0);" +
+                    "  float diffuse = max(dot(modelViewNormal, -mLightDirection), 0.0);" +
                     "  vLightColor = mAmbiantColor + (mLightColor * diffuse);" +
                     "}";
+
     private final static String PIXEL_SHADER =
             "precision mediump float;" +
                     "varying vec2 vTextureCoord;" +
@@ -125,6 +126,7 @@ public class ShaderTextureLights extends Shader {
         float[] ambiant = renderer.getLightAmbiant();
         GLES20.glUniform4fv(mLightAmbiantId, 1, ambiant, 0);
 
+        GLES20.glEnableVertexAttribArray(mNormalsId);
         NormalList normalList = face3D.getNormalList();
         FloatBuffer vertexBuffer = normalList.getFloatBuffer();
         vertexBuffer.position(0);
