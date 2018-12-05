@@ -15,6 +15,8 @@
  */
 package fr.arnaudguyon.smartgl.math;
 
+import android.support.annotation.NonNull;
+
 /**
  * Created by aguyon on 18.01.17.
  */
@@ -33,7 +35,7 @@ public class Vector3D {
         return mVector;
     }
 
-    public void normalize() {
+    public Vector3D normalize() {
         float norm = (float) Math.sqrt(mVector[0]*mVector[0] + mVector[1]*mVector[1] + mVector[2]*mVector[2]);
         if (norm > 0) {
             mVector[0] /= norm;
@@ -44,6 +46,24 @@ public class Vector3D {
             mVector[1] = 0;
             mVector[2] = 0;
         }
+        return this;
+    }
+
+    public float dot(@NonNull Vector3D other) {
+        return (mVector[0] * other.mVector[0]) + (mVector[1] * other.mVector[1]) + (mVector[2] * other.mVector[2]);
+    }
+
+    public Vector3D add(@NonNull Vector3D other) {
+        mVector[0] += other.mVector[0];
+        mVector[1] += other.mVector[1];
+        mVector[2] += other.mVector[2];
+        return this;
+    }
+    public Vector3D multiply(float scale) {
+        mVector[0] *= scale;
+        mVector[1] *= scale;
+        mVector[2] *= scale;
+        return this;
     }
 
 }
