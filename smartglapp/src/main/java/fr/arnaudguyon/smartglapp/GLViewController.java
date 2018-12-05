@@ -57,6 +57,7 @@ public class GLViewController implements SmartGLViewController {
     private Object3D mCube;
     private Object3D mFrigate;
     private Object3D mCruiser;
+    private Object3D mEarth;
 
     private Object3D mNextObject = null;
     private Object3D mNextObjectColor = null;
@@ -107,6 +108,7 @@ public class GLViewController implements SmartGLViewController {
         mCube = loadCube(context);
         mFrigate = loadFrigate(context);
         mCruiser = loadCruiser(context);
+        mEarth = loadEarth(context);
 
         switchToFrigate();
     }
@@ -259,6 +261,19 @@ public class GLViewController implements SmartGLViewController {
     void switchToCube() {
         mNextObject = null;
         mNextObjectColor = mCube;
+    }
+
+    private Object3D loadEarth(@NonNull Context context) {
+        WavefrontModel modelColored = new WavefrontModel.Builder(context, R.raw.earth_obj)
+                .setColor(0.2f, 0.6f, 1)
+                .create();
+        Object3D object3D = modelColored.toObject3D();
+        object3D.setPos(0, 0, -4);
+        return object3D;
+    }
+    void switchToEarth() {
+        mNextObject = null;
+        mNextObjectColor = mEarth;
     }
 
     private Object3D loadBus(@NonNull Context context) {

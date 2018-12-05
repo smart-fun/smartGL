@@ -53,35 +53,40 @@ public class MainGLFragment extends Fragment {
         LightAmbiant lightAmbiant = new LightAmbiant(0.4f, 0.4f, 0.4f);
         mFragmentGLView.getSmartGLRenderer().setLightAmbiant(lightAmbiant);
 
-        View cruiserButton = view.findViewById(R.id.cruiserButton);
-        cruiserButton.setOnClickListener(new View.OnClickListener() {
+        view.findViewById(R.id.cruiserButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 controller.switchToCruiser();
             }
         });
-        View fregateButton = view.findViewById(R.id.fregateButton);
-        fregateButton.setOnClickListener(new View.OnClickListener() {
+
+        view.findViewById(R.id.fregateButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 controller.switchToFrigate();
             }
         });
-        View busButton = view.findViewById(R.id.busButton);
-        busButton.setOnClickListener(new View.OnClickListener() {
+
+        view.findViewById(R.id.busButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 controller.switchToBus();
             }
         });
-        View cubeButton = view.findViewById(R.id.cubeButton);
-        cubeButton.setOnClickListener(new View.OnClickListener() {
+
+        view.findViewById(R.id.cubeButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 controller.switchToCube();
             }
         });
 
+        view.findViewById(R.id.earthButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                controller.switchToEarth();
+            }
+        });
 
     }
 

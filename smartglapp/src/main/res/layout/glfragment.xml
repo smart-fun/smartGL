@@ -59,6 +59,12 @@
             android:layout_height="wrap_content"
             android:text="CUBE"/>
 
+        <Button
+            android:id="@+id/earthButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="EARTH"/>
+
     </LinearLayout>
 
 </LinearLayout>
