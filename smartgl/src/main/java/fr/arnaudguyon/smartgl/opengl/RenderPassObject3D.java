@@ -25,7 +25,8 @@ public class RenderPassObject3D extends RenderPass {
         SHADER_TEXTURE,
         SHADER_TEXTURE_AMBIANT,
         SHADER_TEXTURE_LIGHTS,
-        SHADER_COLOR
+        SHADER_COLOR,
+        SHADER_COLOR_LIGHTS
     }
 
     public RenderPassObject3D() {
@@ -55,6 +56,10 @@ public class RenderPassObject3D extends RenderPass {
             case SHADER_COLOR:
                 ShaderColor shaderColor = new ShaderColor();
                 setShader(shaderColor);
+                break;
+            case SHADER_COLOR_LIGHTS:
+                ShaderColorLights shaderColorLights = new ShaderColorLights();
+                setShader(shaderColorLights);
                 break;
         }
     }
