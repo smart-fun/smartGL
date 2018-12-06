@@ -50,7 +50,7 @@ public class MainGLFragment extends Fragment {
 
         mFragmentGLView.getSmartGLRenderer().setClearColor(0.01f, 0.01f, 0.1f, 1);
 
-        LightAmbiant lightAmbiant = new LightAmbiant(0.4f, 0.4f, 0.4f);
+        LightAmbiant lightAmbiant = new LightAmbiant(0.3f, 0.3f, 0.3f);
         mFragmentGLView.getSmartGLRenderer().setLightAmbiant(lightAmbiant);
 
         view.findViewById(R.id.cruiserButton).setOnClickListener(new View.OnClickListener() {

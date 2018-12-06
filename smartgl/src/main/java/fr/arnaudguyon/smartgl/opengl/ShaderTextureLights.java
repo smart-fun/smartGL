@@ -42,7 +42,7 @@ public class ShaderTextureLights extends Shader {
                     "  gl_Position = m_ProjectionMatrix * m_Position;" +
                     "  vTextureCoord = m_UV;" +
                     "  vec3 modelViewNormal = vec3(mModelMatrix * vec4(mNormals, 0.0));" +
-                    "  float diffuse = max(dot(modelViewNormal, -mLightDirection), 0.0);" +
+                    "  float diffuse = 2.0 * max(dot(modelViewNormal, -mLightDirection), 0.0);" +
                     "  vLightColor = mAmbiantColor + (mLightColor * diffuse);" +
                     "}";
 

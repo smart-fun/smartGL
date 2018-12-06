@@ -66,4 +66,11 @@ public class Vector3D {
         return this;
     }
 
+    public Vector3D vectorProduct(@NonNull Vector3D o) {
+        float x = mVector[1] * o.mVector[2] - mVector[2] * o.mVector[1];
+        float y = mVector[2] * o.mVector[0] - mVector[0] * o.mVector[2];
+        float z = mVector[0] * o.mVector[1] - mVector[1] * o.mVector[0];
+        return new Vector3D(x, y, z);
+    }
+
 }

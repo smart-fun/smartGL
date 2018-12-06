@@ -77,7 +77,7 @@ public class GLViewController implements SmartGLViewController {
         // Add RenderPass for Sprites & Object3D
         SmartGLRenderer renderer = smartGLView.getSmartGLRenderer();
         mRenderPassObject3D = new RenderPassObject3D(RenderPassObject3D.ShaderType.SHADER_TEXTURE_LIGHTS, true, true);
-        mRenderPassObject3DColor = new RenderPassObject3D(RenderPassObject3D.ShaderType.SHADER_COLOR, true, false);
+        mRenderPassObject3DColor = new RenderPassObject3D(RenderPassObject3D.ShaderType.SHADER_COLOR_LIGHTS, true, false);
         mRenderPassSprite = new RenderPassSprite();
         renderer.addRenderPass(mRenderPassObject3D);
         renderer.addRenderPass(mRenderPassObject3DColor);
@@ -85,8 +85,8 @@ public class GLViewController implements SmartGLViewController {
 
         renderer.setDoubleSided(false);
 
-        SmartColor lightColor = new SmartColor(2, 2, 2);
-        Vector3D lightDirection = new Vector3D(1, -1, -1);
+        SmartColor lightColor = new SmartColor(1, 1, 1);
+        Vector3D lightDirection = new Vector3D(0.2f, -1, -1);
         lightDirection.normalize();
         LightParallel lightParallel = new LightParallel(lightColor, lightDirection);
         renderer.setLightParallel(lightParallel);

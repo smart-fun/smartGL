@@ -26,6 +26,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import fr.arnaudguyon.smartgl.math.Vector3D;
 import fr.arnaudguyon.smartgl.opengl.ColorList;
 import fr.arnaudguyon.smartgl.opengl.Face3D;
 import fr.arnaudguyon.smartgl.opengl.NormalList;
@@ -146,6 +147,13 @@ public class WavefrontModel {
             mY = y;
             mZ = z;
         }
+
+        Normal(Vector3D vector) {
+            float[] values = vector.getArray();
+            mX = values[0];
+            mY = values[1];
+            mZ = values[2];
+        }
     }
 
     private class UV {
@@ -244,6 +252,38 @@ public class WavefrontModel {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        if (mNormals.size() == 0) {
+            // compute normals
+            for(int faceIndex=0; faceIndex<mStrips.size(); ++faceIndex) {
+                Strip strip = mStrips.get(faceIndex);
+                Vertex v0 = mVertex.get(strip.mIndexes.get(0).mVertexIndex);
+                Vertex v1 = mVertex.get(strip.mIndexes.get(1).mVertexIndex);
+                Vertex v2 = mVertex.get(strip.mIndexes.get(2).mVertexIndex);
+                Vector3D vec0 = new Vector3D(v1.mX - v0.mX, v1.mY - v0.mY, v1.mZ - v0.mZ);
+                Vector3D vec1 = new Vector3D(v2.mX - v0.mX, v2.mY - v0.mY, v2.mZ - v0.mZ);
+                vec0.normalize();
+                vec1.normalize();
+                Vector3D normal3D = vec1.vectorProduct(vec0);
+                normal3D.normalize();
+                Normal normal = new Normal(normal3D);
+                mNormals.add(normal);
+                strip.mIndexes.get(0).mNormalIndex = mNormals.size() - 1;
+                strip.mIndexes.get(1).mNormalIndex = mNormals.size() - 1;
+                strip.mIndexes.get(2).mNormalIndex = mNormals.size() - 1;
+            }
+        } else {
+            // normalize normals
+            for(Normal normal : mNormals) {
+                Vector3D vec = new Vector3D(normal.mX, normal.mY, normal.mZ);
+                vec.normalize();
+                float[] values = vec.getArray();
+                normal.mX = values[0];
+                normal.mY = values[1];
+                normal.mZ = values[2];
+            }
+        }
+
         Log.i("DONE", "DONE");
     }
 
