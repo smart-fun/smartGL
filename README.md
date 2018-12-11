@@ -305,7 +305,7 @@ Add the libary dependency to your **APP** build.gradle file
 
 ```
 dependencies {
-    implementation 'com.github.smart-fun:smartGL:1.1.10'    // add this line
+    implementation 'com.github.smart-fun:smartGL:1.2.0'    // add this line
 }
 ```
 
