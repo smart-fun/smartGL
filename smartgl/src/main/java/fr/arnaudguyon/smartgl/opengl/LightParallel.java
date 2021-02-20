@@ -15,7 +15,7 @@
 */
 package fr.arnaudguyon.smartgl.opengl;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import fr.arnaudguyon.smartgl.math.Vector3D;
 

@@ -23,7 +23,8 @@ import android.graphics.Matrix;
 import android.media.ExifInterface;
 import android.opengl.GLES20;
 import android.opengl.GLUtils;
-import android.support.annotation.DrawableRes;
+
+import androidx.annotation.DrawableRes;
 
 public class Texture {
 	

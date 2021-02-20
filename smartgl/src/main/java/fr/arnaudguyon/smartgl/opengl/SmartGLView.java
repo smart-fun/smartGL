@@ -19,10 +19,11 @@ import java.util.Vector;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.support.annotation.NonNull;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
+
+import androidx.annotation.NonNull;
 
 import fr.arnaudguyon.smartgl.touch.TouchHelper;
 import fr.arnaudguyon.smartgl.touch.TouchHelperEvent;

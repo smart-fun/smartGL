@@ -15,7 +15,7 @@
  */
 package fr.arnaudguyon.smartgl.opengl;
 
-import android.support.annotation.FloatRange;
+import androidx.annotation.FloatRange;
 
 /**
  * Ambiant Light for OpenGL

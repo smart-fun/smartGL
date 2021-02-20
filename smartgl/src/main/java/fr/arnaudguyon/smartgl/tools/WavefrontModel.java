@@ -16,8 +16,9 @@
 package fr.arnaudguyon.smartgl.tools;
 
 import android.content.Context;
-import android.support.annotation.FloatRange;
 import android.util.Log;
+
+import androidx.annotation.FloatRange;
 
 import java.io.BufferedReader;
 import java.io.IOException;

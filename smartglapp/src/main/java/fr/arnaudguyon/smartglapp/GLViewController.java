@@ -16,7 +16,8 @@
 package fr.arnaudguyon.smartglapp;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
+
+import androidx.annotation.NonNull;
 
 import fr.arnaudguyon.smartgl.math.Vector3D;
 import fr.arnaudguyon.smartgl.opengl.LightParallel;
@@ -83,7 +84,7 @@ public class GLViewController implements SmartGLViewController {
         renderer.addRenderPass(mRenderPassObject3DColor);
         renderer.addRenderPass(mRenderPassSprite);
 
-        renderer.setDoubleSided(false);
+        renderer.setDoubleSided(true);
 
         SmartColor lightColor = new SmartColor(1, 1, 1);
         Vector3D lightDirection = new Vector3D(0.2f, -1, -1);
@@ -109,6 +110,8 @@ public class GLViewController implements SmartGLViewController {
         mFrigate = loadFrigate(context);
         mCruiser = loadCruiser(context);
         mEarth = loadEarth(context);
+
+        //renderer.setDoubleSided(true);
 
         switchToFrigate();
     }
@@ -207,6 +210,7 @@ public class GLViewController implements SmartGLViewController {
             float ry = mObject3D.getRotY() + 37 * frameDuration;
             float rz = mObject3D.getRotZ() + 26 * frameDuration;
             mObject3D.setRotation(rx, ry, rz);
+            //mObject3D.setPos(mObject3D.getPosX() + 0.01f, mObject3D.getPosY(), mObject3D.getPosZ());
         }
 
     }
@@ -224,6 +228,11 @@ public class GLViewController implements SmartGLViewController {
         WavefrontModel model = new WavefrontModel.Builder(context, R.raw.space_cruiser_obj)
                 .addTexture("", mSpaceCruiserTexture)
                 .create();
+
+//        ColladaModel model = new ColladaModel.Builder(context, R.raw.space_cruiser_collada_textured)
+//                .addTexture("space_cruiser_4_color_png", mSpaceCruiserTexture)	// "space_cruiser_4_color_png" is defined in the space_cruiser_collada_textured
+//                .create();
+
         Object3D object3D = model.toObject3D();
         object3D.setScale(0.2f, 0.2f, 0.2f);
         object3D.setPos(0, 0, -5);

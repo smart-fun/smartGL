@@ -15,7 +15,7 @@
  */
 package fr.arnaudguyon.smartgl.math;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 /**
  * Created by aguyon on 18.01.17.
