@@ -33,6 +33,8 @@ import android.os.Handler;
 import android.os.SystemClock;
 import android.util.SparseArray;
 
+import androidx.annotation.NonNull;
+
 import fr.arnaudguyon.smartgl.R;
 import fr.arnaudguyon.smartgl.math.Vector2D;
 import fr.arnaudguyon.smartgl.tools.Assert;
@@ -168,6 +170,16 @@ public abstract class OpenGLRenderer implements GLSurfaceView.Renderer {
         synchronized (this) {
             mRenderPasses.remove(renderPass);
         }
+    }
+
+    public boolean removeObject(@NonNull RenderObject renderObject) {
+        boolean removed = false;
+        synchronized (this) {
+            for(RenderPass renderPass: mRenderPasses) {
+                removed |= renderPass.removeObject(renderObject);
+            }
+        }
+        return removed;
     }
 
     protected void onPreRender(GL10 gl) {
@@ -346,9 +358,10 @@ public abstract class OpenGLRenderer implements GLSurfaceView.Renderer {
                     continue;
                 }
                 if (!tex.isBinded()) {
-                    tex.bindTexture();
+                    if (tex.bindTexture()) {
+                        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, tex.getId());
+                    }
                 }
-                GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, tex.getId());
                 // UVs
                 UVList uvList = face.getUVList();
                 FloatBuffer uvBuffer = (uvList != null) ? uvList.getFloatBuffer() : null;

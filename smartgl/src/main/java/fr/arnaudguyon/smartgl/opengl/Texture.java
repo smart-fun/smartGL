@@ -25,6 +25,8 @@ import android.opengl.GLES20;
 import android.opengl.GLUtils;
 
 import androidx.annotation.DrawableRes;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 public class Texture {
 	
@@ -61,7 +63,7 @@ public class Texture {
 		mId[0] = UNBIND_VALUE;
 	}
 
-	public Texture(int width, int height, Bitmap bitmap) {
+	public Texture(int width, int height, @Nullable Bitmap bitmap) {
 		this();
 		mWidth = width;
 		mHeight = height;
@@ -79,6 +81,17 @@ public class Texture {
 		mBitmap = BitmapFactory.decodeResource(resources, resourceId);
 		mWidth = mBitmap.getWidth();
 		mHeight = mBitmap.getHeight();
+	}
+
+	public boolean setBitmap(int width, int height, @NonNull Bitmap bitmap) {
+		if (isBinded()) {
+			return false;
+		} else {
+			this.mWidth = width;
+			this.mHeight = height;
+			this.mBitmap = bitmap;
+			return true;
+		}
 	}
 
 	boolean bindTexture() {
@@ -114,14 +127,14 @@ public class Texture {
 		}
 	}
 	
-	public static Bitmap loadAndTurnAndResize(Context context, String pictureName, int approxWidth) {
+	public static Bitmap loadAndTurnAndResize(Context context, String pictureFileName, int approxWidth) {
 		try {
-			final ExifInterface exif = new ExifInterface(pictureName);
+			final ExifInterface exif = new ExifInterface(pictureFileName);
 			final int srcWidth = exif.getAttributeInt(ExifInterface.TAG_IMAGE_WIDTH, approxWidth);
 			final int subSample = (srcWidth / approxWidth);
 			BitmapFactory.Options resizeOptions = new BitmapFactory.Options();
 			resizeOptions.inSampleSize = subSample;
-			Bitmap bitmap = BitmapFactory.decodeFile(pictureName, resizeOptions);
+			Bitmap bitmap = BitmapFactory.decodeFile(pictureFileName, resizeOptions);
 			if (bitmap != null) {
 				final int orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
 				if (orientation != ExifInterface.ORIENTATION_NORMAL) {
