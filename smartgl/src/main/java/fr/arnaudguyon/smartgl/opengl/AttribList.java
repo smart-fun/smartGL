@@ -118,6 +118,7 @@ public class AttribList {
 	}
 
 	public final void finalizeBuffer() {
+		mCurrentIndex = mInternalBuffer.length;
 		mFloatBuffer = ByteBuffer.allocateDirect(mCurrentIndex * Display.BYTES_PER_FLOAT).order(ByteOrder.nativeOrder()).asFloatBuffer();
 		mFloatBuffer.put(mInternalBuffer).position(0);
 	}
