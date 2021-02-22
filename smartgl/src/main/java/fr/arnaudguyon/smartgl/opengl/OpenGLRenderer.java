@@ -175,7 +175,7 @@ public abstract class OpenGLRenderer implements GLSurfaceView.Renderer {
     public boolean removeObject(@NonNull RenderObject renderObject) {
         boolean removed = false;
         synchronized (this) {
-            for(RenderPass renderPass: mRenderPasses) {
+            for (RenderPass renderPass : mRenderPasses) {
                 removed |= renderPass.removeObject(renderObject);
             }
         }
@@ -358,10 +358,9 @@ public abstract class OpenGLRenderer implements GLSurfaceView.Renderer {
                     continue;
                 }
                 if (!tex.isBinded()) {
-                    if (tex.bindTexture()) {
-                        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, tex.getId());
-                    }
+                    tex.bindTexture();
                 }
+                GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, tex.getId());
                 // UVs
                 UVList uvList = face.getUVList();
                 FloatBuffer uvBuffer = (uvList != null) ? uvList.getFloatBuffer() : null;
