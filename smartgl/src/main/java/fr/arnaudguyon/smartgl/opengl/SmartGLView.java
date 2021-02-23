@@ -130,10 +130,6 @@ public class SmartGLView extends OpenGLView {
     public void onPreRender(OpenGLRenderer renderer) {
         super.onPreRender(renderer);
 
-        if (mListener != null) {
-            mListener.onTick(this);
-        }
-
         // Handle Touch Events: skip several moves in a row and send OnTouchEvent (on OpenGLThread)
         if (mTouchHelper != null) {
             TouchHelperEvent event = mTouchHelper.getNextEvent();
@@ -164,6 +160,10 @@ public class SmartGLView extends OpenGLView {
                 }
 
             }
+        }
+
+        if (mListener != null) {
+            mListener.onTick(this);
         }
     }
 
