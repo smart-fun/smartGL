@@ -1,12 +1,12 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 29
+    compileSdkVersion 34
 
     defaultConfig {
         applicationId "fr.arnaudguyon.smartglapp"
         minSdkVersion 14
-        targetSdkVersion 29
+        targetSdkVersion 34
         versionCode 15
         versionName "1.0.3"
     }
@@ -16,10 +16,11 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    namespace 'fr.arnaudguyon.smartglapp'
 }
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation 'androidx.annotation:annotation:1.1.0'
+    implementation 'androidx.annotation:annotation:1.9.1'
     implementation project(':smartgl')
 }
