@@ -63,6 +63,10 @@ public class TouchHelper {
 		}
 	}
 
+	public void cancelLongPressEvents() {
+		cancelLongPressDates();
+	}
+
 	private void checkLongPress() {
 
 		TouchFingerInfo finger = null;

@@ -231,4 +231,10 @@ public class SmartGLView extends OpenGLView {
             mListener.onResizeView(this);
         }
     }
+
+    public void cancelLongPressEvents() {
+        if (mTouchHelper != null) {
+            mTouchHelper.cancelLongPressEvents();
+        }
+    }
 }
