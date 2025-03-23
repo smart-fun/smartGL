@@ -1,5 +1,5 @@
 apply plugin: 'com.android.library'
-
+apply plugin: 'maven-publish'
 android {
     compileSdk 34
     defaultConfig {
@@ -15,9 +15,24 @@ android {
         }
     }
     namespace 'fr.arnaudguyon.smartgl'
+
 }
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'androidx.annotation:annotation:1.9.1'
+}
+
+publishing {
+    publications {
+        release(MavenPublication) {
+            groupId = 'io.jitpack'
+            artifactId = 'library'
+            version = '1.0'
+
+            afterEvaluate {
+                from components.findByName('release')
+            }
+        }
+    }
 }
