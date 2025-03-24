@@ -295,23 +295,23 @@ Add the following maven{} line to your **PROJECT** build.gradle file
 ```
 allprojects {
     repositories {
-        jcenter()
+        mavenCentral()
         maven { url "https://jitpack.io" }    // add this line
     }
 }
 ```
 
-Add the libary dependency to your **APP** build.gradle file
+Add the libary dependency to your **APP** module build.gradle file
 
 ```
 dependencies {
-    implementation 'com.github.smart-fun:smartGL:1.2.3'    // add this line
+    implementation 'com.github.smart-fun:smartGL:1.2.8'    // add this line
 }
 ```
 
 ## License ##
 
-Copyright 2016-2021 Arnaud Guyon
+Copyright 2016-2025 Arnaud Guyon
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -325,3 +325,4 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 
+ 	
