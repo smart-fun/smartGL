@@ -6,7 +6,7 @@ android {
         minSdkVersion 14
         targetSdkVersion 34
         versionCode 38
-        versionName "1.2.7"
+        versionName "1.2.8"
     }
     buildTypes {
         release {
@@ -23,16 +23,20 @@ dependencies {
     implementation 'androidx.annotation:annotation:1.9.1'
 }
 
-publishing {
-    publications {
-        release(MavenPublication) {
-            groupId = 'io.jitpack'
-            artifactId = 'library'
-            version = '1.0'
-
-            afterEvaluate {
-                from components.findByName('release')
+afterEvaluate {
+    publishing {
+        publications {
+            release(MavenPublication) {
+                //from components.findByName('release')
+                groupId = 'com.github.smart-fun'
+                artifactId = 'smartgl'
+                version = '1.2.8'
+                artifact("$buildDir/outputs/aar/smartgl-release.aar") {
+                    builtBy tasks.named("assembleRelease")
+                    extension "aar"
+                }
             }
         }
     }
 }
+
