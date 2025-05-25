@@ -19,19 +19,19 @@ import java.util.Vector;
 
 import android.opengl.Matrix;
 
+import androidx.annotation.NonNull;
+
 public abstract class RenderObject implements IShaderTextureFade {
 
 	private boolean mIs3D;
 	private boolean mVisible;
-	private Vector<Face3D> mFaces;
-	private float[] mMatrix;
+	private @NonNull Vector<Face3D> mFaces = new Vector<>();
+	private final @NonNull float[] mMatrix = new float[16];
     private float mAlpha = 1;
     private boolean mInvalidMatrix = true;
 
 	public RenderObject(boolean is3D) {
 		mIs3D = is3D;
-		mFaces = new Vector<Face3D>();
-		mMatrix = new float[16];
 		mVisible = true;
 		Matrix.setIdentityM(mMatrix, 0);
 	}
@@ -52,14 +52,14 @@ public abstract class RenderObject implements IShaderTextureFade {
 		return !mVisible;
 	}
 
-	public final Vector<Face3D> getFaces() {
+	public final @NonNull Vector<Face3D> getFaces() {
 		return mFaces;
 	}
 
-	public final void setFaces(Vector<Face3D> faces) {
+	public final void setFaces(@NonNull Vector<Face3D> faces) {
 		mFaces = faces;
 	}
-	public final void addFace(Face3D face) {
+	public final void addFace(@NonNull Face3D face) {
 		mFaces.add(face);
 	}
 
@@ -86,11 +86,8 @@ public abstract class RenderObject implements IShaderTextureFade {
     }
 
 	public void forceReleaseAll() {
-
 		// force deleteOpenGLResource
-		final int faceSize = mFaces.size();
-		for (int faceIt = 0; faceIt < faceSize; ++faceIt) {
-			Face3D face = mFaces.get(faceIt);
+		for(Face3D face : mFaces) {
 			Texture texture = face.getTexture();
 			if (texture != null) {
 				texture.unbindTexture();
@@ -101,19 +98,14 @@ public abstract class RenderObject implements IShaderTextureFade {
 	}
 
 	protected void releaseResources() {
-		final int faceSize = mFaces.size();
-		for (int faceIt = 0; faceIt < faceSize; ++faceIt) {
-			Face3D face = mFaces.get(faceIt);
+		for(Face3D face : mFaces) {
 			face.releaseResources();
 		}
 		mFaces.clear();
 	}
 
 	public void releaseTextures() {
-		Vector<Face3D> faces = getFaces();
-		final int faceSize = faces.size();
-		for (int faceIt = 0; faceIt < faceSize; ++faceIt) {
-			Face3D face = faces.get(faceIt);
+		for(Face3D face : mFaces) {
 			Texture texture = face.getTexture();
 			if (texture != null) {
 				texture.unbindTexture();

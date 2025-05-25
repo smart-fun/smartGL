@@ -19,7 +19,10 @@ import android.graphics.Bitmap;
 import android.opengl.Matrix;
 import android.util.SparseArray;
 
+import androidx.annotation.Nullable;
+
 import java.util.ArrayList;
+import java.util.Vector;
 
 import fr.arnaudguyon.smartgl.touch.SpriteTouchListener;
 import fr.arnaudguyon.smartgl.touch.TouchHelperEvent;
@@ -106,7 +109,10 @@ public class Sprite extends RenderObject {
 	}
 	
 	public void setTexture(Texture texture) {
-		getFace().setTexture(texture);
+		Face3D face = getFace();
+		if (face != null) {
+			face.setTexture(texture);
+		}
 	}
 
     public void setScale(float scaleX, float scaleY) {
@@ -208,8 +214,12 @@ public class Sprite extends RenderObject {
 		return mPosY;
 	}
 
-	final public Face3D getFace() {
-		return getFaces().firstElement();
+	final public @Nullable Face3D getFace() {
+		Vector<Face3D> faces = getFaces();
+		if (!faces.isEmpty()) {
+			return getFaces().firstElement();
+		}
+		return null;
 	}
 
 	public float getWidth() {
@@ -271,15 +281,18 @@ public class Sprite extends RenderObject {
     }
 
     public void flipVertexH() {
-        VertexList vertexList = getFace().getVertexList();
-        float[] internalBuffer = vertexList.getInternalBuffer();
+		Face3D face = getFace();
+		if (face != null) {
+			VertexList vertexList = face.getVertexList();
+			float[] internalBuffer = vertexList.getInternalBuffer();
 
-        internalBuffer[0] = mWidth - internalBuffer[0];
-        internalBuffer[3] = mWidth - internalBuffer[3];
-        internalBuffer[6] = mWidth - internalBuffer[6];
-        internalBuffer[9] = mWidth - internalBuffer[9];
+			internalBuffer[0] = mWidth - internalBuffer[0];
+			internalBuffer[3] = mWidth - internalBuffer[3];
+			internalBuffer[6] = mWidth - internalBuffer[6];
+			internalBuffer[9] = mWidth - internalBuffer[9];
 
-        vertexList.getFloatBuffer().put(internalBuffer).position(0);
+			vertexList.getFloatBuffer().put(internalBuffer).position(0);
+		}
     }
 
 	public void rebindUVs(int xMin, int xMax, int yMin, int yMax, float texWidth, float texHeight) {
@@ -315,9 +328,13 @@ public class Sprite extends RenderObject {
 		if ((width == mWidth) && (height == mHeight)) {
 			return;
 		}
+		Face3D face = getFace();
+		if (face == null) {
+			return;
+		}
 		mWidth = width;
 		mHeight = height;
-		VertexList vertexList = getFace().getVertexList();
+		VertexList vertexList = face.getVertexList();
 
 		float[] internalBuffer = vertexList.getInternalBuffer();
 		//internalBuffer[0] = 0;

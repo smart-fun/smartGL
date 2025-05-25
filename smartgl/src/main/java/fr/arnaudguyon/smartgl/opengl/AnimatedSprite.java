@@ -44,17 +44,21 @@ public class AnimatedSprite extends Sprite implements AnimatedFace3D.AnimatedFac
 		uvList.add(uStop, vStop);
 		uvList.finalizeBuffer();
 		AnimatedFace3D face = (AnimatedFace3D) getFace();
-		face.addFrame(duration, uvList);
+		if (face != null) {
+			face.addFrame(duration, uvList);
+		}
 	}
 	
 	public final int getFrameNumber() {
 		AnimatedFace3D aniFace = (AnimatedFace3D) getFace();
-		return aniFace.getFrameNumber();
+		return (aniFace != null) ? aniFace.getFrameNumber() : 0;
 	}
 	
 	public void setFrame(int frameNumber) {
 		AnimatedFace3D aniFace = (AnimatedFace3D) getFace();
-		aniFace.setFrame(frameNumber);
+		if (aniFace != null) {
+			aniFace.setFrame(frameNumber);
+		}
 	}
 
     @Override
