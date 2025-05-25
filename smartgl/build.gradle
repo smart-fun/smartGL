@@ -5,8 +5,8 @@ android {
     defaultConfig {
         minSdkVersion 14
         targetSdkVersion 34
-        versionCode 38
-        versionName "1.2.8"
+        versionCode 39
+        versionName "1.2.9"
     }
     buildTypes {
         release {
@@ -30,7 +30,7 @@ afterEvaluate {
                 //from components.findByName('release')
                 groupId = 'com.github.smart-fun'
                 artifactId = 'smartgl'
-                version = '1.2.8'
+                version = '1.2.9'
                 artifact("$buildDir/outputs/aar/smartgl-release.aar") {
                     builtBy tasks.named("assembleRelease")
                     extension "aar"
