@@ -217,7 +217,7 @@ public class Sprite extends RenderObject {
 	final public @Nullable Face3D getFace() {
 		Vector<Face3D> faces = getFaces();
 		if (!faces.isEmpty()) {
-			return getFaces().firstElement();
+			return faces.firstElement();
 		}
 		return null;
 	}
